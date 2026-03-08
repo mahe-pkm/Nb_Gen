@@ -29,8 +29,16 @@
 
     <div class="app-header" style="display: flex; justify-content: space-between; align-items: center;">
         <h1>NanoBanana Pro <span>| Multi-Attire Generator</span></h1>
-        <button id="themeToggleBtn" class="icon-btn" onclick="toggleTheme()" title="Toggle Light/Dark Mode"
-            style="font-size: 1.2rem; border: none;">☀️</button>
+        <div
+            style="display: flex; align-items: center; gap: 12px; background: var(--surface-hover); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);">
+            <span id="themeLabel"
+                style="font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: 0.5px;">CYBER
+                NEON</span>
+            <label class="toggle-switch" style="margin: 0;">
+                <input type="checkbox" id="themeToggleCheckbox" onchange="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
 
     <div class="container">
@@ -104,7 +112,24 @@
             </div>
 
             <div class="sidebar-block">
+                <h2>4. Scene & Background</h2>
+                <div class="form-group">
+                    <label>Background Color (Hex/RGB/Text)</label>
+                    <input type="text" id="bgColor" placeholder="e.g. pure white, dark grey, #FFFFFF"
+                        value="Hex #FFFFFF" oninput="updateAllPrompts()"
+                        style="width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px; border-radius: 4px; font-family: inherit; font-size: 13px; margin-top: 5px;">
+                </div>
+            </div>
+
+            <div class="sidebar-block">
                 <h2>Master Actions</h2>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Output Format</label>
+                    <select id="outputFormat" onchange="updateAllPrompts(); renderPoseGrid();">
+                        <option value="text">Plain Text (Standard)</option>
+                        <option value="json">Structured JSON (for Gemini/API)</option>
+                    </select>
+                </div>
                 <button class="primary-btn full-width" onclick="copyEverything()">Copy Master + Additional +
                     Negative</button>
             </div>
@@ -135,7 +160,7 @@
                 </div>
             </div>
 
-            <p class="version">Created by Mahendran D | v5.0 Multi-Attire - updated on 07-03-2026</p>
+            <p class="version">Created by Mahendran D | v6.0.2 Ultimate Automation - updated on 08-03-2026</p>
         </aside>
 
         <!-- RIGHT MAIN AREA: GENERATOR PANELS -->
@@ -161,23 +186,24 @@
             </div>
 
             <!-- DUPATTA PROMPT (Optional) -->
-            <div class="block" style="border-left: 4px solid #d946ef;">
+            <div class="block" style="border-left: 4px solid var(--success-color);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <h2 style="margin-bottom: 0;">Dupatta Prompt (Optional)</h2>
                     <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                        <label style="color: var(--text-primary); font-size: 13px; cursor: pointer;"><input type="radio"
                                 name="dupattaStyle" value="none" checked onchange="updateDupattaPrompt()"> None</label>
-                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                        <label style="color: var(--text-primary); font-size: 13px; cursor: pointer;"><input type="radio"
                                 name="dupattaStyle" value="left" onchange="updateDupattaPrompt()"> Left</label>
-                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                        <label style="color: var(--text-primary); font-size: 13px; cursor: pointer;"><input type="radio"
                                 name="dupattaStyle" value="right" onchange="updateDupattaPrompt()"> Right</label>
-                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                        <label style="color: var(--text-primary); font-size: 13px; cursor: pointer;"><input type="radio"
                                 name="dupattaStyle" value="full" onchange="updateDupattaPrompt()"> Full/Open</label>
                     </div>
                 </div>
                 <textarea id="dupattaPrompt" readonly>No Dupatta selected.</textarea>
                 <button class="icon-btn" onclick="copyText('dupattaPrompt')"
-                    style="background-color: #d946ef; color: white; margin-top: 10px;">📋 Copy Dupatta Prompt</button>
+                    style="background-color: var(--success-color); color: #fff; margin-top: 10px; border: none;">📋 Copy
+                    Dupatta Prompt</button>
             </div>
 
             <!-- NEGATIVE PROMPT -->
@@ -199,14 +225,14 @@
             </div>
 
             <!-- GEMINI SYSTEM INSTRUCTION (PERSONALIZATION) -->
-            <div class="block" style="border-left: 4px solid #8b5cf6;">
-                <h2 style="color: #c4b5fd;">⚙️ Gemini Personalization (System Instruction)</h2>
+            <div class="block" style="border-left: 4px solid var(--primary-color);">
+                <h2 style="color: var(--primary-color);">⚙️ Gemini Personalization (System Instruction)</h2>
                 <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
                     To "lock in" the Physics Engine, paste this into your <strong>Gemini Settings > System
                         Instructions</strong> (if available) or create a custom "Gem":
                 </p>
                 <textarea id="systemPrompt" readonly
-                    style="height: 120px; background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6;">You act as an expert fashion photographer and textile specialist. Your goal is to render garments with absolute photorealism on an elegant fashion model.
+                    style="height: 120px; background: rgba(0, 0, 0, 0.05); border-color: var(--primary-color);">You act as an expert fashion photographer and textile specialist. Your goal is to render garments with absolute photorealism on an elegant fashion model.
 Please follow these fabric physics guidelines:
 - Raw silk should appear woven and textured, avoiding a smooth satin look.
 - Zardosi embroidery should have a raised, three-dimensional appearance with micro-shadows.
@@ -214,28 +240,31 @@ Please follow these fabric physics guidelines:
 - Beads are solid objects; ensure they cast appropriate micro-shadows and do not look like flat stitched thread.
 Always output the final image in a strict vertical portrait orientation.</textarea>
                 <button class="icon-btn" onclick="copyText('systemPrompt')"
-                    style="background: #8b5cf6; color: white; margin-top: 10px;">📋 Copy System Instruction</button>
+                    style="background: var(--primary-color); color: #fff; margin-top: 10px; border: none;">📋 Copy
+                    System Instruction</button>
             </div>
 
             <!-- INPUT PREP (LIGHTROOM) -->
-            <div class="block" style="border-left: 4px solid #3b82f6;">
-                <h2 style="color: #93c5fd;">📸 Pro Tip: Input Image Prep (Lightroom)</h2>
+            <div class="block" style="border-left: 4px solid var(--text-primary);">
+                <h2 style="color: var(--text-primary);">📸 Pro Tip: Input Image Prep (Lightroom)</h2>
                 <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
                     Gemini cannot see details that are buried in shadow or blur. For best results, use the
                     <a href="./Gemini_Texture_Revealer.xmp" download
-                        style="color: #4ade80; text-decoration: underline; font-weight: bold;">Gemini Texture
+                        style="color: var(--primary-color); text-decoration: underline; font-weight: bold;">Gemini
+                        Texture
                         Revealer.xmp</a> preset or manually apply these settings:
                 </p>
                 <div
-                    style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e2e8f0;">
-                    <div>TEXTURE: <span style="color: #4ade80;">+60</span> (ULTRA: Maximum Weave Pop)</div>
-                    <div>CLARITY: <span style="color: #4ade80;">+35</span> (ULTRA: Contrast Separation)</div>
-                    <div>DEHAZE: <span style="color: #4ade80;">+20</span> (Cuts Glare/Softness)</div>
-                    <div>WHITES: <span style="color: #4ade80;">+20</span> (Forces Specular Glint)</div>
-                    <div>SHARPNESS: <span style="color: #4ade80;">+60</span> (Radius 1.4, Detail 75)</div>
+                    style="background: var(--surface-hover); padding: 12px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-primary);">
+                    <div>TEXTURE: <span style="color: var(--success-color);">+60</span> (ULTRA: Maximum Weave Pop)</div>
+                    <div>CLARITY: <span style="color: var(--success-color);">+35</span> (ULTRA: Contrast Separation)
+                    </div>
+                    <div>DEHAZE: <span style="color: var(--success-color);">+20</span> (Cuts Glare/Softness)</div>
+                    <div>WHITES: <span style="color: var(--success-color);">+20</span> (Forces Specular Glint)</div>
+                    <div>SHARPNESS: <span style="color: var(--success-color);">+60</span> (Radius 1.4, Detail 75)</div>
                     <div>NOISE REDUCTION: <span style="color: #f87171;">0</span> (CRITICAL: RAW Grain Required)</div>
                 </div>
-                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
                     <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;"><strong>Step 2:
                             Export</strong></p>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
@@ -252,8 +281,8 @@ Always output the final image in a strict vertical portrait orientation.</textar
             </div>
 
             <!-- TROUBLESHOOTING PROMPT -->
-            <div class="block" style="border-color: #fca5a5; background-color: #2a1515;">
-                <h2 style="color: #fca5a5;">⚠️ Nano Banana Fallback (Troubleshooting)</h2>
+            <div class="block" style="border-color: var(--danger-color); background-color: var(--danger-bg);">
+                <h2 style="color: var(--danger-color);">⚠️ Nano Banana Fallback (Troubleshooting)</h2>
                 <textarea id="fallbackPrompt" readonly style="height: 100px;">FALLBACK OVERRIDE — PREVIOUS OUTPUT FAILED ORIENTATION.
 
 Retry with strict enforcement:
@@ -263,7 +292,8 @@ Retry with strict enforcement:
 • Do not rotate, crop, or reframe
 • Regenerate until portrait orientation is achieved</textarea>
                 <button class="icon-btn" onclick="copyText('fallbackPrompt')"
-                    style="background-color: #dc2626; margin-top: 10px;">📋 Copy Fallback Prompt</button>
+                    style="background-color: var(--danger-color); color: #fff; border: none; margin-top: 10px;">📋 Copy
+                    Fallback Prompt</button>
             </div>
 
         </main>

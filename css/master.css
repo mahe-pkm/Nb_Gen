@@ -1,33 +1,53 @@
 /* GLOBAL VARIABLES */
 :root {
-    --bg-color: #0f1115;
-    --surface-color: #1a1d24;
-    --surface-hover: #232730;
-    --primary-color: #8b5cf6;
-    --primary-hover: #7c3aed;
-    --secondary-color: #3b82f6;
-    --text-primary: #e2e8f0;
+    /* CYBER NEON DARK THEME (DEFAULT) */
+    --bg-color: #0b0f19;
+    /* Deep Obsidian */
+    --bg-primary: #0b0f19;
+    --surface-color: #151a28;
+    /* Matte Charcoal */
+    --surface-hover: #1e253c;
+    --border-color: #2a3441;
+    --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
-    --border-color: #2e3340;
-    --success-color: #22c55e;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-    
+
+    /* Neon Accents */
+    --primary-color: #00f0ff;
+    /* Cyber Cyan */
+    --primary-hover: #00c3d0;
+    --success-color: #d946ef;
+    /* Neon Magenta */
+    --danger-color: #fca5a5;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+
     --sidebar-width: 340px;
 }
 
 /* LIGHT THEME OVERRIDES */
-body.light-theme {
-    --bg-color: #f8fafc;
+.light-theme {
+    /* LUXURY FASHION EDITORIAL THEME */
+    --bg-color: #fcfbf9;
+    /* Creamy Off-White */
+    --bg-primary: #fcfbf9;
     --surface-color: #ffffff;
-    --surface-hover: #f1f5f9;
-    --primary-color: #7c3aed;
-    --primary-hover: #6d28d9;
-    --secondary-color: #2563eb;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --border-color: #e2e8f0;
-    --success-color: #16a34a;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --surface-hover: #f3f0ea;
+    --border-color: #e5dfd3;
+    --text-primary: #2d2426;
+    /* Deep Burgundy/Charcoal */
+    --text-secondary: #6e6466;
+
+    /* Elegant Accents */
+    --primary-color: #b59575;
+    /* Champagne Gold */
+    --primary-hover: #9c7f62;
+    --success-color: #722f37;
+    /* Wine Dark */
+    --danger-color: #dc2626;
+    --danger-bg: rgba(220, 38, 38, 0.05);
+
+    --card-shadow: 0 4px 20px -2px rgba(181, 149, 117, 0.15), 0 2px 4px -2px rgba(181, 149, 117, 0.05);
 }
 
 /* RESET */
@@ -59,7 +79,7 @@ body {
 .app-header h1 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .app-header span {
@@ -85,19 +105,23 @@ body {
     flex-direction: column;
     gap: 20px;
     position: sticky;
-    top: 80px; /* Below header */
+    top: 80px;
+    /* Below header */
     height: calc(100vh - 100px);
     overflow-y: auto;
-    padding-right: 8px; /* For scrollbar */
+    padding-right: 8px;
+    /* For scrollbar */
 }
 
 /* Scrollbar Styling for Sidebar */
 .sidebar::-webkit-scrollbar {
     width: 6px;
 }
+
 .sidebar::-webkit-scrollbar-track {
     background: transparent;
 }
+
 .sidebar::-webkit-scrollbar-thumb {
     background: var(--border-color);
     border-radius: 4px;
@@ -221,11 +245,11 @@ select:focus {
     transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: var(--primary-color);
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
     transform: translateX(20px);
 }
 
@@ -286,7 +310,8 @@ input:checked + .slider:before {
 /* MAIN CONTENT */
 .main-content {
     flex-grow: 1;
-    min-width: 0; /* Prevents flex blowout */
+    min-width: 0;
+    /* Prevents flex blowout */
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -425,13 +450,17 @@ textarea:focus {
     background-color: var(--primary-color);
     color: #fff;
 }
-.btn-copy-full:hover { background-color: var(--primary-hover); }
+
+.btn-copy-full:hover {
+    background-color: var(--primary-hover);
+}
 
 .btn-copy-pose {
     background-color: var(--surface-color);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
 }
+
 .btn-copy-pose:hover {
     background-color: var(--surface-hover);
 }
@@ -461,15 +490,26 @@ textarea:focus {
     animation: toastIn 0.3s forwards, toastOut 0.3s forwards 2.5s;
 }
 
-@keyframes toastIn { to { opacity: 1; transform: translateY(0); } }
-@keyframes toastOut { to { opacity: 0; transform: translateY(20px); } }
+@keyframes toastIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastOut {
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
     .container {
         flex-direction: column;
     }
-    
+
     .sidebar {
         width: 100%;
         height: auto;
@@ -477,7 +517,7 @@ textarea:focus {
         flex-direction: row;
         flex-wrap: wrap;
     }
-    
+
     .sidebar-block {
         flex: 1;
         min-width: 250px;
@@ -495,7 +535,7 @@ textarea:focus {
     border-radius: 8px;
     padding: 12px 20px;
     z-index: 9999;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -543,6 +583,13 @@ textarea:focus {
 }
 
 @keyframes slideUp {
-    from { bottom: -100px; opacity: 0; }
-    to { bottom: 20px; opacity: 1; }
+    from {
+        bottom: -100px;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 20px;
+        opacity: 1;
+    }
 }

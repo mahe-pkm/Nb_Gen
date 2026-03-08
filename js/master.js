@@ -2094,23 +2094,34 @@ function updateAllPrompts() {
         );
     }
 
-    const finalMaster = physicsBaseText + `
+    const finalMaster = physicsBaseText + `\n\nGENERATE: A masterpiece fashion image where the fabric physics and workmanship depth are indistinguishable from reality.\nEnsure the layout is strictly vertical/portrait (2:3 or 3:4).\n\n/// SECONDARY SUBJECT DETAILS & ISOLATION ///\n${modelDesc}, warm pleasant expression, high-end editorial photography lighting.\nFOOTWEAR: Ensure footwear is cropped out or hidden by the garment flow.${accDesc}\nCLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
 
-GENERATE: A masterpiece fashion image where the fabric physics and workmanship depth are indistinguishable from reality.
-Ensure the layout is strictly vertical/portrait (2:3 or 3:4).
+    const bgColorInput = document.getElementById('bgColor');
+    const customBgColor = (bgColorInput && bgColorInput.value.trim() !== '') ? bgColorInput.value.trim() : 'Hex #FFFFFF';
 
-/// SECONDARY SUBJECT DETAILS & ISOLATION ///
-${modelDesc}, warm pleasant expression, high-end editorial photography lighting.
-FOOTWEAR: Ensure footwear is cropped out or hidden by the garment flow.${accDesc}
-CLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
+    const finalAdditional = `Set the scene in a high-end commercial fashion studio.\nThe background must be a pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.\nPlease use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.\nEnsure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.\nCrucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
 
     document.getElementById('masterPrompt').value = finalMaster;
+    document.getElementById('additionalPrompt').value = finalAdditional;
 
-    document.getElementById('additionalPrompt').value = `Set the scene in a high-end commercial fashion studio.
-The background must be a pure flat seamless white backdrop (Hex #FFFFFF) with zero cast shadows on the floor.
-Please use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.
-Ensure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.
-Crucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
+    // Build structured JSON in the background for copying
+    window.currentJsonState = window.currentJsonState || { poses: {} };
+    window.currentJsonState.master_prompt = {
+        task: "Generate a masterpiece fashion image where fabric physics and workmanship depth are indistinguishable from reality.",
+        layout: "Strictly vertical/portrait (2:3 or 3:4) orientation.",
+        style_and_physics_base: physicsBaseText,
+        subject_details: `${modelDesc}, warm pleasant expression, high-end editorial photography lighting.`,
+        footwear: `Ensure footwear is cropped out or hidden by the garment flow.${accDesc}`,
+        clean_edges: "Maintain razor-sharp subject separation from background for professional masking."
+    };
+
+    window.currentJsonState.additional_instructions = {
+        scene: "High-end commercial fashion studio.",
+        background: `Pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.`,
+        lighting: "Crisp key lighting for specular glints on embellishments. Global illumination with subsurface scattering for realistic fabric and model.",
+        details: "Ensure gold zardosi and stones sparkle naturally. Prevent background edge bloom from bleeding into garment edges.",
+        consistency: "Crucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. Styling: elegant, loose hair, high-fidelity lighting."
+    };
 }
 
 const dupattaPrompts = {
@@ -2168,6 +2179,16 @@ function renderPoseGrid() {
         const displayImg = activeVar.img || pose.img || 'fallback.png';
         const placeholderImg = `${activeAttire}/placeholder.svg`;
 
+        let poseOutputText = activeVar.text;
+
+        // Store structured JSON in the background
+        window.currentJsonState = window.currentJsonState || { poses: {} };
+        window.currentJsonState.poses[pose.id] = {
+            title: pose.title,
+            variation: activeVar.label,
+            raw_instructions: activeVar.text
+        };
+
         const card = document.createElement('div');
         card.className = 'pose-card';
         card.innerHTML = `
@@ -2176,7 +2197,7 @@ function renderPoseGrid() {
             <div class="tabs">
                 ${tabsHtml}
             </div>
-            <textarea readonly id="ta_${pose.id}">${activeVar.text}</textarea>
+            <textarea readonly id="ta_${pose.id}">${poseOutputText}</textarea>
             <div class="action-group" style="flex-wrap: wrap; gap: 8px;">
                 <button class="btn-copy-full" onclick="copyCardFull('${pose.id}')">Copy Full</button>
                 <button class="btn-copy-full" onclick="copyCardFull('${pose.id}', true)" style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
@@ -2283,11 +2304,32 @@ function copyCardFull(poseId, forceDupatta = false) {
     if (markerBlue) markerText += `\n🔵 BLUE MARKED AREA: ${markerBlue}`;
     if (markerGreen) markerText += `\n🟢 GREEN MARKED AREA: ${markerGreen}`;
 
-    if (markerText) {
-        markerText = `\n\nImage Edits & Adjustments:${markerText}`;
-    }
+    const outputFormat = document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : 'text';
+    let full = "";
 
-    const full = `${master}${dupattaText}\n\nGarment and Pose Details:\n${poseTxt}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
+    if (outputFormat === 'json') {
+        const fullObj = {
+            _instruction_for_ai_model: "You are an elite fashion photographer and textile expert AI. Read this JSON configuration payload strictly and generate the final fashion image exactly as specified. Do NOT output text. Output the photorealistic image only.",
+            master_prompt: window.currentJsonState.master_prompt,
+            pose_details: window.currentJsonState.poses[poseId],
+            additional_instructions: window.currentJsonState.additional_instructions,
+            negative_prompt: neg
+        };
+
+        if (dupattaText) fullObj.dupatta_inclusion = dupattaText.trim();
+
+        if (markerText) {
+            fullObj.image_edits = {
+                red_marker: markerRed || null,
+                blue_marker: markerBlue || null,
+                green_marker: markerGreen || null
+            };
+        }
+        full = JSON.stringify(fullObj, null, 2);
+    } else {
+        if (markerText) markerText = `\n\nImage Edits & Adjustments:${markerText}`;
+        full = `${master}${dupattaText}\n\nGarment and Pose Details:\n${poseTxt}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
+    }
 
     copyToClipboard(full, () => showToast(dupattaText ? "Copied Full Prompt (+Dupatta)!" : "Copied Full Prompt!"));
 }
@@ -2312,11 +2354,31 @@ function copyEverything() {
     if (markerBlue) markerText += `\n🔵 BLUE MARKED AREA: ${markerBlue}`;
     if (markerGreen) markerText += `\n🟢 GREEN MARKED AREA: ${markerGreen}`;
 
-    if (markerText) {
-        markerText = `\n\nImage Edits & Adjustments:${markerText}`;
-    }
+    const outputFormat = document.getElementById('outputFormat') ? document.getElementById('outputFormat').value : 'text';
+    let full = "";
 
-    const full = `${master}${dupattaText}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
+    if (outputFormat === 'json') {
+        const fullObj = {
+            _instruction_for_ai_model: "You are an elite fashion photographer and textile expert AI. Read this JSON configuration payload strictly and generate the final fashion image exactly as specified. Do NOT output text. Output the photorealistic image only.",
+            master_prompt: window.currentJsonState.master_prompt,
+            additional_instructions: window.currentJsonState.additional_instructions,
+            negative_prompt: neg
+        };
+
+        if (dupattaText) fullObj.dupatta_inclusion = dupattaText.trim();
+
+        if (markerText) {
+            fullObj.image_edits = {
+                red_marker: markerRed || null,
+                blue_marker: markerBlue || null,
+                green_marker: markerGreen || null
+            };
+        }
+        full = JSON.stringify(fullObj, null, 2);
+    } else {
+        if (markerText) markerText = `\n\nImage Edits & Adjustments:${markerText}`;
+        full = `${master}${dupattaText}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
+    }
     copyToClipboard(full, () => showToast(dupattaText ? "Copied All (+Dupatta)!" : "Copied Master + Additional + Negative!"));
 }
 
@@ -2356,15 +2418,30 @@ function closeWipBanner() {
 function toggleTheme() {
     const isLight = document.body.classList.toggle('light-theme');
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    document.getElementById('themeToggleBtn').innerText = isLight ? '🌙' : '☀️';
+
+    const checkbox = document.getElementById('themeToggleCheckbox');
+    if (checkbox) checkbox.checked = isLight;
+
+    const label = document.getElementById('themeLabel');
+    if (label) {
+        label.innerText = isLight ? 'LUXURY EDITORIAL' : 'CYBER NEON';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check saved theme
-    if (localStorage.getItem('theme') === 'light') {
+    const isLight = localStorage.getItem('theme') === 'light';
+    if (isLight) {
         document.body.classList.add('light-theme');
-        const btn = document.getElementById('themeToggleBtn');
-        if (btn) btn.innerText = '🌙';
+    }
+
+    // Set UI state
+    const checkbox = document.getElementById('themeToggleCheckbox');
+    if (checkbox) checkbox.checked = isLight;
+
+    const label = document.getElementById('themeLabel');
+    if (label) {
+        label.innerText = isLight ? 'LUXURY EDITORIAL' : 'CYBER NEON';
     }
 
     if (localStorage.getItem('hideWipBanner') === 'true') {

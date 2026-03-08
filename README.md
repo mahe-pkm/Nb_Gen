@@ -7,7 +7,7 @@
 <h4 align="center">An advanced internal AI prompt engineering tool for photorealistic fashion generation.</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-5.0.0-blueviolet.svg?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-6.0.2-blueviolet.svg?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active_Production-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Deployment-Automated-ff69b4.svg?style=for-the-badge" alt="Deployment">
 </p>
@@ -29,7 +29,18 @@ By strictly controlling garment boundaries, human anatomy, fabric mechanics, and
 
 ---
 
-## :sparkles: Key Features
+## :sparkles: Key Features (v6.0.2)
+
+### 🤖 Structured JSON Output Generation
+NanoBanana Pro natively serializes complex, multi-layered prompts into perfectly structured JSON payloads. This allows seamless passing of physics parameters, framing constraints, and AI model system-instructions directly into Gemini and automated backend API scripts (like `automate.mjs`) without string parsing issues.
+
+### 🌗 Dual Theme Intelligent UI
+Engineered for both late-night coding and daylight production, NanoBanana Pro features a hardware-accelerated dual-theme UI. Switch instantly between:
+- **Cyber Neon Dark**: Deep obsidian blacks, matte charcoal surfaces, and vibrant cyan/magenta neon accents.
+- **Luxury Fashion Editorial**: Creamy off-whites, champagne gold borders, and deep burgundy elements reminiscent of high-end fashion portals.
+
+### 🎨 Custom Background Hex Injection
+A granular "Scene & Background" control module allows operators to input specific Hex codes (e.g. `#1e293b`), RGB values, or semantic colors (e.g. "Pure White", "Matte Charcoal"). The engine instantly mathematically calculates and injects this ambient data directly into the environmental prompt requirements.
 
 ### 🔄 Dynamic Input Context (Real Model vs Mannequin)
 Generating clothing on a plastic mannequin requires a completely different AI instruction set than generating clothing on a real model whose face needs hiding. Our **Input Source Toggle** handles this seamlessly:
@@ -70,7 +81,7 @@ NanoBanana Pro natively understands the physics, draping, and terminology of **1
 This repository includes a completely automated deployment mechanism built for shared hosting environments. 
 
 ### `update.php`
-No SSH keys or FTP clients required. The `update.php` script living on the server securely listens for a webhook or a direct URL hit via a secret key. When triggered:
+No SSH keys or FTP clients required. The elegant, animated `update.php` script living on the server securely listens for a webhook or a direct URL hit via a secret key. When triggered:
 1. It downloads the latest `main.zip` from this exact GitHub repository.
 2. Unzips the files and logically moves them into the live `public_html` root directory.
 3. Overwrites old files with fresh ones in seconds.

@@ -14,11 +14,11 @@ if (!isset($_GET['key']) || $_GET['key'] !== $secretKey) {
 }
 
 // 2. CONFIGURATION
-$repoUrl = 'https://github.com/mahe-pkm/NB-Prompt/archive/refs/heads/master.zip';
+$repoUrl = 'https://github.com/mahe-pkm/Nb_Gen/archive/refs/heads/main.zip';
 $zipFile = __DIR__ . '/update_temp.zip';
 $extractPath = __DIR__ . '/';
 // GitHub zips extract into a folder named RepoName-BranchName
-$githubFolderPrefix = 'NB-Prompt-master/'; 
+$githubFolderPrefix = 'Nb_Gen-main/'; 
 
 // Files and folders to STRICTLY EXCLUDE from being overwritten or deleted
 $excludeList = [

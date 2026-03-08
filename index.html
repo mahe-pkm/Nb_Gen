@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NanoBanana Pro – Multi-Attire Prompt Generator</title>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <!-- Apple PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NanoBanana Pro">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/master.css">
+</head>
+
+<silhouette>
+
+    <div class="app-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>NanoBanana Pro <span>| Multi-Attire Generator</span></h1>
+        <button id="themeToggleBtn" class="icon-btn" onclick="toggleTheme()" title="Toggle Light/Dark Mode"
+            style="font-size: 1.2rem; border: none;">☀️</button>
+    </div>
+
+    <div class="container">
+        <!-- LEFT SIDEBAR: CONFIGURATORS -->
+        <aside class="sidebar">
+            <div class="sidebar-block">
+                <h2>1. Select Attire</h2>
+                <div class="attire-grid" id="attireTabs">
+                    <button class="attire-btn active" data-attire="anarkali">Anarkali</button>
+                    <button class="attire-btn" data-attire="lehenga">Lehenga</button>
+                    <button class="attire-btn" data-attire="semi_lehenga">Semi Lehenga</button>
+                    <button class="attire-btn" data-attire="half_saree">Half Saree</button>
+                    <button class="attire-btn" data-attire="saree_ready">Ready Saree</button>
+                    <button class="attire-btn" data-attire="sharara">Sharara</button>
+                    <button class="attire-btn" data-attire="chudidhar">Chudidhar (3pc)</button>
+                    <button class="attire-btn" data-attire="tops">Tops</button>
+                    <button class="attire-btn" data-attire="long_gown">Long Gown</button>
+                    <button class="attire-btn" data-attire="two_piece">2 Pcs Set</button>
+                </div>
+            </div>
+
+            <div class="sidebar-block">
+                <h2>2. Model Profile</h2>
+
+                <div class="form-group">
+                    <label>Input Source</label>
+                    <select id="inputSource" onchange="updateAllPrompts()">
+                        <option value="mannequin">Mannequin</option>
+                        <option value="model">Real Model (Replace Characteristics)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Region & Look</label>
+                    <select id="modelLook" onchange="updateAllPrompts()">
+                        <option value="indian">Standard Indian</option>
+                        <option value="south_indian">South Indian</option>
+                        <option value="north_indian">North Indian</option>
+                        <option value="indo_western">Indo-Western / Modern</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>silhouette Type</label>
+                    <select id="bodyType" onchange="updateAllPrompts()">
+                        <option value="regular">Regular / Model Default</option>
+                        <option value="slim">Slim / Petite</option>
+                        <option value="curvy">Curvy / Plus-size Fashion</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Age Group</label>
+                    <select id="ageGroup" onchange="updateAllPrompts()">
+                        <option value="young">Young Adult (18-25)</option>
+                        <option value="adult">Adult (25-35)</option>
+                        <option value="mature">Mature Elegant (35-50)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sidebar-block">
+                <h2>3. Accessories</h2>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="accessoriesToggle" checked onchange="updateAllPrompts()">
+                    <span class="slider"></span>
+                    <span class="toggle-label">Auto-Match Accessories</span>
+                </label>
+                <p class="helper-text">Dynamically injects matching jewelry, bindis, or hairpieces based on selected
+                    Look and Attire.</p>
+            </div>
+
+            <div class="sidebar-block">
+                <h2>Master Actions</h2>
+                <button class="primary-btn full-width" onclick="copyEverything()">Copy Master + Additional +
+                    Negative</button>
+            </div>
+
+            <!-- GEMINI MARKERS -->
+            <div class="sidebar-block" style="border-color: #f43f5e;">
+                <h2 style="color: #f43f5e; margin-bottom: 8px;">✏️ Gemini Markers</h2>
+                <p class="helper-text" style="margin-bottom: 12px; color: var(--text-secondary);">Add instructions for
+                    Gemini's markup/edit zones.</p>
+
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="color: #ef4444; font-size: 11px;">🔴 Red Marker</label>
+                    <textarea id="markerRed"
+                        style="height: 50px; padding: 8px; font-size: 12px; border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.05);"
+                        placeholder="Specify changes for red area..."></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="color: #3b82f6; font-size: 11px;">🔵 Blue Marker</label>
+                    <textarea id="markerBlue"
+                        style="height: 50px; padding: 8px; font-size: 12px; border-color: rgba(59,130,246,0.5); background: rgba(59,130,246,0.05);"
+                        placeholder="Specify changes for blue area..."></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom: 0px;">
+                    <label style="color: #10b981; font-size: 11px;">🟢 Green Marker</label>
+                    <textarea id="markerGreen"
+                        style="height: 50px; padding: 8px; font-size: 12px; border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.05);"
+                        placeholder="Specify changes for green area..."></textarea>
+                </div>
+            </div>
+
+            <p class="version">Created by Mahendran D | v5.0 Multi-Attire - updated on 07-03-2026</p>
+        </aside>
+
+        <!-- RIGHT MAIN AREA: GENERATOR PANELS -->
+        <main class="main-content">
+
+            <!-- MASTER PROMPT -->
+            <div class="block">
+                <div class="block-header">
+                    <h2>Live Master Prompt</h2>
+                    <button class="icon-btn" onclick="copyText('masterPrompt')" title="Copy Master">📋 Copy</button>
+                </div>
+                <textarea id="masterPrompt" readonly></textarea>
+            </div>
+
+            <!-- ADDITIONAL PROMPT -->
+            <div class="block">
+                <div class="block-header">
+                    <h2>Additional Rules (Lighting & Consistancy)</h2>
+                    <button class="icon-btn" onclick="copyText('additionalPrompt')" title="Copy Additional">📋
+                        Copy</button>
+                </div>
+                <textarea id="additionalPrompt" readonly></textarea>
+            </div>
+
+            <!-- DUPATTA PROMPT (Optional) -->
+            <div class="block" style="border-left: 4px solid #d946ef;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 style="margin-bottom: 0;">Dupatta Prompt (Optional)</h2>
+                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                                name="dupattaStyle" value="none" checked onchange="updateDupattaPrompt()"> None</label>
+                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                                name="dupattaStyle" value="left" onchange="updateDupattaPrompt()"> Left</label>
+                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                                name="dupattaStyle" value="right" onchange="updateDupattaPrompt()"> Right</label>
+                        <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                                name="dupattaStyle" value="full" onchange="updateDupattaPrompt()"> Full/Open</label>
+                    </div>
+                </div>
+                <textarea id="dupattaPrompt" readonly>No Dupatta selected.</textarea>
+                <button class="icon-btn" onclick="copyText('dupattaPrompt')"
+                    style="background-color: #d946ef; color: white; margin-top: 10px;">📋 Copy Dupatta Prompt</button>
+            </div>
+
+            <!-- NEGATIVE PROMPT -->
+            <div class="block">
+                <div class="block-header">
+                    <h2>Negative Prompt</h2>
+                    <button class="icon-btn" onclick="copyText('negativePrompt')" title="Copy Negative">📋 Copy</button>
+                </div>
+                <textarea id="negativePrompt" <textarea id="negativePrompt"
+                    readonly>Ensure the image is free from blurry or pixelated areas, bad structure, extra features, missing features, watermarks, text, or signatures. Avoid a plastic look, oil painting styles, cartoons, CGI, or rendered appearances. Do not use smooth fabrics where texture is expected, flat embroidery, or soft/melted beads.</textarea>
+            </div>
+
+            <!-- POSES SECTION -->
+            <div class="block" style="border-top: 4px solid var(--primary-color);">
+                <h2><span id="attireNameDisplay">Anarkali</span> Specific Poses</h2>
+                <div class="poses" id="posesContainer">
+                    <!-- Pose cards injected via JS -->
+                </div>
+            </div>
+
+            <!-- GEMINI SYSTEM INSTRUCTION (PERSONALIZATION) -->
+            <div class="block" style="border-left: 4px solid #8b5cf6;">
+                <h2 style="color: #c4b5fd;">⚙️ Gemini Personalization (System Instruction)</h2>
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
+                    To "lock in" the Physics Engine, paste this into your <strong>Gemini Settings > System
+                        Instructions</strong> (if available) or create a custom "Gem":
+                </p>
+                <textarea id="systemPrompt" readonly
+                    style="height: 120px; background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6;">You act as an expert fashion photographer and textile specialist. Your goal is to render garments with absolute photorealism on an elegant fashion model.
+Please follow these fabric physics guidelines:
+- Raw silk should appear woven and textured, avoiding a smooth satin look.
+- Zardosi embroidery should have a raised, three-dimensional appearance with micro-shadows.
+- Sequins and metallic elements should display accurate specular glints associated with jewelry lighting.
+- Beads are solid objects; ensure they cast appropriate micro-shadows and do not look like flat stitched thread.
+Always output the final image in a strict vertical portrait orientation.</textarea>
+                <button class="icon-btn" onclick="copyText('systemPrompt')"
+                    style="background: #8b5cf6; color: white; margin-top: 10px;">📋 Copy System Instruction</button>
+            </div>
+
+            <!-- INPUT PREP (LIGHTROOM) -->
+            <div class="block" style="border-left: 4px solid #3b82f6;">
+                <h2 style="color: #93c5fd;">📸 Pro Tip: Input Image Prep (Lightroom)</h2>
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
+                    Gemini cannot see details that are buried in shadow or blur. For best results, use the
+                    <a href="./Gemini_Texture_Revealer.xmp" download
+                        style="color: #4ade80; text-decoration: underline; font-weight: bold;">Gemini Texture
+                        Revealer.xmp</a> preset or manually apply these settings:
+                </p>
+                <div
+                    style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e2e8f0;">
+                    <div>TEXTURE: <span style="color: #4ade80;">+60</span> (ULTRA: Maximum Weave Pop)</div>
+                    <div>CLARITY: <span style="color: #4ade80;">+35</span> (ULTRA: Contrast Separation)</div>
+                    <div>DEHAZE: <span style="color: #4ade80;">+20</span> (Cuts Glare/Softness)</div>
+                    <div>WHITES: <span style="color: #4ade80;">+20</span> (Forces Specular Glint)</div>
+                    <div>SHARPNESS: <span style="color: #4ade80;">+60</span> (Radius 1.4, Detail 75)</div>
+                    <div>NOISE REDUCTION: <span style="color: #f87171;">0</span> (CRITICAL: RAW Grain Required)</div>
+                </div>
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;"><strong>Step 2:
+                            Export</strong></p>
+                    <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                        <a href="./Gemini_Optimizer_Export.lrtemplate" download
+                            style="color: #60a5fa; text-decoration: underline; font-weight: bold; font-size: 13px;">⬇️
+                            Normal (4000px / 5MB)</a>
+                        <a href="./Gemini_Max_Fidelity_Export.lrtemplate" download
+                            style="color: #f472b6; text-decoration: underline; font-weight: bold; font-size: 13px;">⬇️
+                            MAX (6000px / 20MB)</a>
+                    </div>
+                    <p style="color: #9ca3af; font-size: 11px; margin-top: 8px; font-style: italic;">*Tip: Start with
+                        "Normal". Only use "MAX" if Gemini specifically requests higher resolution.</p>
+                </div>
+            </div>
+
+            <!-- TROUBLESHOOTING PROMPT -->
+            <div class="block" style="border-color: #fca5a5; background-color: #2a1515;">
+                <h2 style="color: #fca5a5;">⚠️ Nano Banana Fallback (Troubleshooting)</h2>
+                <textarea id="fallbackPrompt" readonly style="height: 100px;">FALLBACK OVERRIDE — PREVIOUS OUTPUT FAILED ORIENTATION.
+
+Retry with strict enforcement:
+• Portrait / Vertical orientation ONLY
+• Height must exceed width
+• Camera locked vertically
+• Do not rotate, crop, or reframe
+• Regenerate until portrait orientation is achieved</textarea>
+                <button class="icon-btn" onclick="copyText('fallbackPrompt')"
+                    style="background-color: #dc2626; margin-top: 10px;">📋 Copy Fallback Prompt</button>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- WIP Banner -->
+    <div id="wip-banner" class="wip-banner">
+        <div class="wip-content">
+            <span class="wip-icon">🚧</span>
+            <p><strong>Note:</strong> Not all images perfectly represent the corresponding poses yet (Work in Progress).
+                However, the generated prompts are fully functional and ready to use!</p>
+            <button class="wip-close" onclick="closeWipBanner()">×</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- External JS -->
+    <script src="js/master.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('✅ SW registered:', reg.scope))
+                    .catch(err => console.warn('⚠️ SW registration failed:', err));
+            });
+        }
+    </script>
+
+</silhouette>
+
+</html>

@@ -7,7 +7,7 @@
 <h4 align="center">An advanced internal AI prompt engineering tool for photorealistic fashion generation.</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-6.0.2-blueviolet.svg?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-6.0.3-blueviolet.svg?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active_Production-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Deployment-Automated-ff69b4.svg?style=for-the-badge" alt="Deployment">
 </p>
@@ -29,7 +29,7 @@ By strictly controlling garment boundaries, human anatomy, fabric mechanics, and
 
 ---
 
-## :sparkles: Key Features (v6.0.2)
+## :sparkles: Key Features (v6.0.3)
 
 ### 🤖 Structured JSON Output Generation
 NanoBanana Pro natively serializes complex, multi-layered prompts into perfectly structured JSON payloads. This allows seamless passing of physics parameters, framing constraints, and AI model system-instructions directly into Gemini and automated backend API scripts (like `automate.mjs`) without string parsing issues.

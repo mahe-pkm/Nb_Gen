@@ -2054,6 +2054,27 @@ const DYNAMIC_ATTIRES = {
 let activeAttire = 'anarkali';
 let activePosesState = {};
 
+// ==========================================
+// SCENE & BACKGROUND HELPERS
+// ==========================================
+
+function setBgColor(value) {
+    const input = document.getElementById('bgColor');
+    if (input) {
+        input.value = value;
+        updateAllPrompts();
+    }
+}
+
+function syncColorPicker() {
+    const picker = document.getElementById('bgColorPicker');
+    const input = document.getElementById('bgColor');
+    if (picker && input) {
+        input.value = `Hex ${picker.value.toUpperCase()}`;
+        updateAllPrompts();
+    }
+}
+
 function updateAllPrompts() {
     const state = {
         look: document.getElementById('modelLook').value,
@@ -2098,6 +2119,27 @@ function updateAllPrompts() {
 
     const bgColorInput = document.getElementById('bgColor');
     const customBgColor = (bgColorInput && bgColorInput.value.trim() !== '') ? bgColorInput.value.trim() : 'Hex #FFFFFF';
+
+    // Attempt bidirectional sync from text -> picker swatch
+    const picker = document.getElementById('bgColorPicker');
+    if (picker && customBgColor) {
+        let match = customBgColor.match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/);
+        if (match) {
+            let hex = match[0];
+            if (hex.length === 4) {
+                hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+            }
+            picker.value = hex;
+        } else if (customBgColor.toLowerCase().includes('white')) {
+            picker.value = '#ffffff';
+        } else if (customBgColor.toLowerCase().includes('black')) {
+            picker.value = '#000000';
+        } else if (customBgColor.toLowerCase().includes('green')) {
+            picker.value = '#00ff00';
+        } else if (customBgColor.toLowerCase().includes('grey') || customBgColor.toLowerCase().includes('gray')) {
+            picker.value = '#808080';
+        }
+    }
 
     const finalAdditional = `Set the scene in a high-end commercial fashion studio.\nThe background must be a pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.\nPlease use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.\nEnsure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.\nCrucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
 

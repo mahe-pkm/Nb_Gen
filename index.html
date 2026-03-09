@@ -114,10 +114,25 @@
             <div class="sidebar-block">
                 <h2>4. Scene & Background</h2>
                 <div class="form-group">
-                    <label>Background Color (Hex/RGB/Text)</label>
-                    <input type="text" id="bgColor" placeholder="e.g. pure white, dark grey, #FFFFFF"
-                        value="Hex #FFFFFF" oninput="updateAllPrompts()"
-                        style="width: 100%; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px; border-radius: 4px; font-family: inherit; font-size: 13px; margin-top: 5px;">
+                    <label>Predefined Setups</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px; margin-top: 5px;">
+                        <button type="button" onclick="setBgColor('Hex #FFFFFF')" title="Pure White"
+                            style="width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border-color); background-color: #FFFFFF; cursor: pointer;"></button>
+                        <button type="button" onclick="setBgColor('50% Grey')" title="50% Grey"
+                            style="width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border-color); background-color: #808080; cursor: pointer;"></button>
+                        <button type="button" onclick="setBgColor('Deep Black')" title="Black"
+                            style="width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border-color); background-color: #000000; cursor: pointer;"></button>
+                        <button type="button" onclick="setBgColor('Chroma Green')" title="Green Screen"
+                            style="width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border-color); background-color: #00FF00; cursor: pointer;"></button>
+                    </div>
+                    <label>Manual Background (Hex/RGB/Text)</label>
+                    <div style="display: flex; gap: 8px; margin-top: 5px;">
+                        <input type="text" id="bgColor" placeholder="e.g. Hex #FFFFFF" value="Hex #FFFFFF"
+                            oninput="updateAllPrompts()"
+                            style="flex: 1; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px; border-radius: 4px; font-family: inherit; font-size: 13px;">
+                        <input type="color" id="bgColorPicker" value="#ffffff" onchange="syncColorPicker()"
+                            style="width: 36px; height: 36px; padding: 0; background: none; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+                    </div>
                 </div>
             </div>
 
@@ -160,7 +175,7 @@
                 </div>
             </div>
 
-            <p class="version">Created by Mahendran D | v6.0.2 Ultimate Automation - updated on 08-03-2026</p>
+            <p class="version">Created by Mahendran D | v6.0.3 Ultimate Automation - updated on 09-03-2026</p>
         </aside>
 
         <!-- RIGHT MAIN AREA: GENERATOR PANELS -->

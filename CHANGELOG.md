@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## 🚀 [v6.0.3] - 2026-03-09
+*The "Color Preset & Sync" Update*
+
+### ✨ Added
+- **`Bidirectional Color Sync UI`:** Upgraded the "Scene & Background" block with an interactive visual color picker and 4 predefined environment swatches (Pure White, 50% Grey, Deep Black, Chroma Green).
+- typing a standard Hex code into the manual input now automatically triggers a regular expression parser that instantly updates the visual color picker swatch to match, creating a seamless bidirectional sync.
+
+---
+
 ## 🚀 [v6.0.2] - 2026-03-08
 *The "Engine & Automation Workflow" Update*
 

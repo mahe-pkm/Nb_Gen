@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## 🚀 [v6.0.4] - 2026-03-10
+*The "Prompt Engine Refactor" Update*
+
+### ✨ Added
+- **`Global Prompt Constants`**: Extracted repetitive physics text and pose schemas into `GLOBAL_PHYSICS_PROMPT`, `POSE_LIBRARY`, and `ATTIRE_TYPES` to improve engine performance.
+- **`Dynamic Builder`**: Created the `buildPrompt()` function for efficient prompt assembly.
+- **`Pose Anchoring`**: Added rigid instructions to force the generator to maintain the original mannequin's posture.
+
+### 🐛 Fixed
+- Purged generic aesthetic adjectives (`masterpiece`, `stunning`, etc.) and replaced ambiguous phrases with professional technical vocabulary.
+
+---
+
 ## 🚀 [v6.0.3] - 2026-03-09
 *The "Color Preset & Sync" Update*
 

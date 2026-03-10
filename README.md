@@ -7,7 +7,7 @@
 <h4 align="center">An advanced internal AI prompt engineering tool for photorealistic fashion generation.</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-6.0.3-blueviolet.svg?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-6.0.4-blueviolet.svg?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active_Production-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Deployment-Automated-ff69b4.svg?style=for-the-badge" alt="Deployment">
 </p>

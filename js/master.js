@@ -2,6 +2,7 @@ const GLOBAL_PHYSICS_PROMPT = `ROLE: EXPERT FASHION PHOTOGRAPHER & TEXTILE FOREN
 CONTEXT: The input image is a MANNEQUIN reference.
 The input mannequin image already contains a natural garment pose. The generated model must closely follow the same pose structure visible in the input image. Body orientation, arm placement, and garment fall should remain consistent with the input pose. The pose instructions below act only as refinement guidance. Do NOT dramatically change the pose if the input image already matches the described pose. Maintain similar stance, posture, and garment flow from the source image.
 TASK: "Dress" a real Indian female model in this exact garment.
+OUTPUT INSTRUCTION: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the mannequin, the background, or any text. Completely replace the mannequin with a lifelike human model as specified below. The final image must look like it was shot in a high-end studio.
 
 /// PHASE 1: UNIVERSAL FABRIC & CRAFT ANALYSIS (MANDATORY) ///
 You must dynamically ANALYZE the input image to determine the physics engine:
@@ -39,8 +40,7 @@ STRICT VISUAL RULES:
 • NO Amputations: Hands and fingers must be elegant, complete, and anatomically correct.
 • CLOSED FOOTWEAR ONLY: Feet fully concealed.
 • WATERMARK SPACE: LEAVE EMPTY NEGATIVE SPACE (approx 300x300px) in the TOP-LEFT corner for watermark placement. Do not place important details or face in this area.
-
-GENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality.`;
+GENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality AND HIGH FIDELITY 4K RESOLUTION, MAX POSSIBLE RESOLUTION.`;
 
 const ATTIRE_TYPES = {
   chudidhar: "Chudidhar",
@@ -2095,10 +2095,54 @@ let activePosesState = {};
 // SCENE & BACKGROUND HELPERS
 // ==========================================
 
+let recentColors = [];
+const MAX_RECENT_COLORS = 5;
+
+function saveRecentColor(colorHex) {
+  // Validate basic hex
+  if (!/^#[0-9A-Fa-f]{6}$/i.test(colorHex)) return;
+  // Remove if it already exists to move it to the front
+  recentColors = recentColors.filter((c) => c.toLowerCase() !== colorHex.toLowerCase());
+  recentColors.unshift(colorHex);
+  if (recentColors.length > MAX_RECENT_COLORS) {
+    recentColors.pop();
+  }
+  localStorage.setItem("recentColors", JSON.stringify(recentColors));
+  renderRecentColors();
+}
+
+function renderRecentColors() {
+  const container = document.getElementById("recentColorsContainer");
+  if (!container) return;
+  container.innerHTML = "";
+  if (recentColors.length === 0) {
+    container.innerHTML = '<span style="color: var(--text-secondary); font-size: 11px;">No recent colors</span>';
+    return;
+  }
+  recentColors.forEach((color) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.title = color;
+    btn.style = `width: 20px; height: 20px; border-radius: 4px; border: 1px solid var(--border-color); background-color: ${color}; cursor: pointer;`;
+    btn.onclick = () => {
+      const input = document.getElementById("bgColor");
+      const picker = document.getElementById("bgColorPicker");
+      if (input) input.value = `Hex ${color.toUpperCase()}`;
+      if (picker) picker.value = color;
+      saveRecentColor(color);
+      updateAllPrompts();
+    };
+    container.appendChild(btn);
+  });
+}
+
 function setBgColor(value) {
   const input = document.getElementById("bgColor");
   if (input) {
     input.value = value;
+    // Extract hex to save
+    const match = value.match(/#([0-9A-Fa-f]{6})\b/);
+    if (match) saveRecentColor(match[0]);
     updateAllPrompts();
   }
 }
@@ -2107,7 +2151,9 @@ function syncColorPicker() {
   const picker = document.getElementById("bgColorPicker");
   const input = document.getElementById("bgColor");
   if (picker && input) {
-    input.value = `Hex ${picker.value.toUpperCase()}`;
+    const hexVal = picker.value.toUpperCase();
+    input.value = `Hex ${hexVal}`;
+    saveRecentColor(hexVal);
     updateAllPrompts();
   }
 }
@@ -2167,6 +2213,10 @@ function updateAllPrompts() {
     bgColorInput && bgColorInput.value.trim() !== ""
       ? bgColorInput.value.trim()
       : "Hex #FFFFFF";
+
+  if (bgColorInput && bgColorInput.value) {
+    localStorage.setItem("bgColor", bgColorInput.value);
+  }
 
   // Attempt bidirectional sync from text -> picker swatch
   const picker = document.getElementById("bgColorPicker");
@@ -2346,6 +2396,23 @@ function initTabs() {
       window.selectAttire(attireKey);
     });
   });
+
+  // Restore Background Color
+  const savedBgColor = localStorage.getItem("bgColor");
+  if (savedBgColor) {
+    const bgColorInput = document.getElementById("bgColor");
+    if (bgColorInput) bgColorInput.value = savedBgColor;
+  }
+
+  // Restore Recent Colors
+  try {
+    const savedRecent = localStorage.getItem("recentColors");
+    if (savedRecent) {
+      recentColors = JSON.parse(savedRecent);
+    }
+  } catch (e) { console.error("Could not parse recent colors"); }
+  renderRecentColors();
+
   updateAllPrompts();
   renderPoseGrid();
 }
@@ -2535,7 +2602,7 @@ function fallbackCopy(text, onSuccess) {
   try {
     const successful = document.execCommand("copy");
     if (successful && onSuccess) onSuccess();
-  } catch (err) {}
+  } catch (err) { }
   document.silhouette.removeChild(textArea);
 }
 

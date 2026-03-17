@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanoBanana Pro – Multi-Attire Prompt Generator</title>
+    <title>Buzl's Gemini | Multi-Attire Prompt Generator</title>
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,7 @@
 <silhouette>
 
     <div class="app-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>NanoBanana Pro <span>| Multi-Attire Generator</span></h1>
+        <h1>Buzl's Gemini <span>| Multi-Attire Generator</span></h1>
         <div
             style="display: flex; align-items: center; gap: 12px; background: var(--surface-hover); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);">
             <span id="themeLabel"
@@ -102,13 +102,47 @@
 
             <div class="sidebar-block">
                 <h2>3. Accessories</h2>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="accessoriesToggle" checked onchange="updateAllPrompts()">
+                <label class="toggle-switch" style="margin-bottom: 8px;">
+                    <input type="checkbox" id="accessoriesToggle" checked onchange="updateAllPrompts(); toggleJewelrySection()">
                     <span class="slider"></span>
                     <span class="toggle-label">Auto-Match Accessories</span>
                 </label>
-                <p class="helper-text">Dynamically injects matching jewelry, bindis, or hairpieces based on selected
+                <p class="helper-text" style="margin-bottom: 15px;">Dynamically injects matching jewelry, bindis, or hairpieces based on selected
                     Look and Attire.</p>
+
+                <!-- NEW JEWELRY SECTION -->
+                <div id="jewelrySettingsPanel" style="background: var(--surface-hover); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); margin-top: 10px;">
+                    <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">Custom Jewelry Prompt</h3>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 12px;">
+                        <label style="font-size: 12px; color: var(--text-primary); cursor: pointer;">
+                            <input type="radio" name="jewelryMode" value="none" checked onchange="updateJewelryPrompt()"> None
+                        </label>
+                        <label style="font-size: 12px; color: var(--text-primary); cursor: pointer;">
+                            <input type="radio" name="jewelryMode" value="text" onchange="updateJewelryPrompt()"> Option 1 (Text)
+                        </label>
+                        <label style="font-size: 12px; color: var(--text-primary); cursor: pointer;">
+                            <input type="radio" name="jewelryMode" value="image" onchange="updateJewelryPrompt()"> Option 2 (Image)
+                        </label>
+                    </div>
+
+                    <!-- Option 1: Text Based -->
+                    <div id="jewelryTextOptions" style="display: none;">
+                        <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">Jewelry Level</label>
+                        <select id="jewelryLevel" onchange="updateJewelryPrompt()" style="width: 100%; font-size: 12px; padding: 6px; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="minimal">Minimal (Elegant, Subtle)</option>
+                            <option value="normal" selected>Normal (Standard Set)</option>
+                            <option value="bridal">Bridal / Heavy (Grand, Intricate)</option>
+                        </select>
+                    </div>
+
+                    <!-- Option 2: Image Based -->
+                    <div id="jewelryImageOptions" style="display: none;">
+                        <label style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; display: block;">Reference Instructions</label>
+                        <textarea id="jewelryReferenceText" oninput="updateJewelryPrompt()" style="width: 100%; height: 50px; font-size: 12px; padding: 6px; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;" placeholder="e.g., Extract the exact necklace and earrings from the referenced flat-lay image..."></textarea>
+                        <p style="font-size: 10px; color: var(--danger-color); margin-top: 4px; font-style: italic;">*Note: Ensure you upload the flat-lay reference image alongside the mannequin to Gemini.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="sidebar-block">
@@ -181,7 +215,7 @@
                 </div>
             </div>
 
-            <p class="version">Created by Mahendran D | v6.0.4 Ultimate Automation - updated on 10-03-2026 14:24 IST</p>
+            <p class="version">Created by Mahendran D | v6.1.0 Ultimate Automation - updated on 17-03-2026 13:17 IST</p>
         </aside>
 
         <!-- RIGHT MAIN AREA: GENERATOR PANELS -->
@@ -225,6 +259,17 @@
                 <button class="icon-btn" onclick="copyText('dupattaPrompt')"
                     style="background-color: var(--success-color); color: #fff; margin-top: 10px; border: none;">📋 Copy
                     Dupatta Prompt</button>
+            </div>
+
+            <!-- JEWELRY PROMPT (Optional) -->
+            <div class="block" style="border-left: 4px solid #f59e0b;" id="jewelryPromptBlock">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h2 style="margin-bottom: 0;">Jewelry Extraction & Styling (Optional)</h2>
+                </div>
+                <p class="helper-text" style="font-size: 12px; margin-bottom: 10px; color: var(--text-secondary);">This prompt is isolated to ensure Gemini specifically focuses on extracting or generating the correct jewelry pieces.</p>
+                <textarea id="jewelryPrompt" readonly style="border-color: rgba(245, 158, 11, 0.3);">No Jewelry option selected.</textarea>
+                <button class="icon-btn" onclick="copyText('jewelryPrompt')"
+                    style="background-color: #f59e0b; color: #fff; margin-top: 10px; border: none;">📋 Copy Jewelry Prompt</button>
             </div>
 
             <!-- NEGATIVE PROMPT -->

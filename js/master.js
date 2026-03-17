@@ -2302,6 +2302,143 @@ function updateDupattaPrompt() {
   }
 }
 
+// ==========================================
+// JEWELRY PROMPT SETTINGS
+// ==========================================
+
+const JEWELRY_TEMPLATES = {
+  anarkali: {
+    minimal: "Minimal elegant jewelry: small jhumkas, delicate thin chain. No heavy pieces. Keep the look subtle and sophisticated.",
+    normal: "Standard traditional jewelry: medium-sized kundan or polki earrings, matching necklace, a few bangles, and a subtle bindi. Authentic Indian ethnic styling.",
+    bridal: "Heavy bridal jewelry: grand layered Kundan/Polki necklaces, oversized jhumkas with sahara chains, maang tikka, heavy bangles, rings, and an elaborate bridal appearance."
+  },
+  lehenga: {
+    minimal: "Minimal elegant jewelry: diamond or polki studs, very delicate necklace. Modern and refined, allowing the lehenga to be the focal point.",
+    normal: "Standard traditional jewelry: statement choker, matching earrings, stack of bangles, and a bindi.",
+    bridal: "Extravagant bridal jewelry: heavy bridal choker and raani haar, oversized earrings, maatha patti, nath (nose ring), chuda/heavy bangles, and haath phool."
+  },
+  semi_lehenga: {
+    minimal: "Minimal contemporary jewelry: elegant studs or small drop earrings, very simple delicate chain. Indo-western fusion styling.",
+    normal: "Standard festive jewelry: medium statement earrings, matching necklace, and a few sleek bangles.",
+    bridal: "Heavy festive look: grand choker necklace, elaborate earrings, maang tikka, and a stack of festive bangles."
+  },
+  half_saree: {
+    minimal: "Minimal traditional jewelry: small gold or temple earrings, thin chain. Subtle and classic South Indian styling.",
+    normal: "Standard traditional jewelry: classic gold temple jewelry set including medium necklace, jhumkas, glass bangles, and a bindi.",
+    bridal: "Heavy South Indian bridal jewelry: elaborate antique temple jewelry, layered necklaces (mango mala, kasu mala), vaddanam (waist belt), vanki (armband), jadanagam (hair jewelry), heavy jhumkas and bangles."
+  },
+  saree_ready: {
+    minimal: "Minimal sophisticated jewelry: small diamond or pearl studs, delicate chain, perhaps a watch. Modern and sleek.",
+    normal: "Standard elegance: statement earrings or a classic necklace set, sleek bangles. Appropriate for evening wear or parties.",
+    bridal: "Heavy glamorous jewelry: extravagant diamond or kundan set, heavy earrings, maang tikka, and layered bangles."
+  },
+  sharara: {
+    minimal: "Minimal elegant jewelry: small chaandbaalis or studs, delicate chain. Subtle festive styling.",
+    normal: "Standard traditional jewelry: statement chaandbaalis, matching choker, bangles, and a bindi or passa (side tikka).",
+    bridal: "Heavy bridal jewelry: grand passaa (headpiece), heavy choker, long haar, elaborate earrings, and stacked bangles."
+  },
+  chudidhar: {
+    minimal: "Minimal daily/casual jewelry: tiny studs, very thin chain. Extremely subtle.",
+    normal: "Standard festive jewelry: medium jhumkas or drop earrings, simple necklace, and a few bangles.",
+    bridal: "Heavy festive jewelry: elaborate necklace, heavy earrings, maang tikka, and a full set of bangles."
+  },
+  tops: {
+    minimal: "Minimal modern jewelry: tiny studs, delicate thin geometric chain. Very casual, western styling.",
+    normal: "Standard modern jewelry: hoops or statement drop earrings, layered delicate chains. Chic and trendy.",
+    bridal: "Statement party jewelry: bold statement earrings, chunky necklace or layered chains, statement rings. Very glamorous."
+  },
+  long_gown: {
+    minimal: "Minimal high-fashion jewelry: small diamond studs, delicate tennis bracelet. Elegant red-carpet styling.",
+    normal: "Standard evening jewelry: elegant drop earrings or a classic diamond necklace. Sophisticated evening gown styling.",
+    bridal: "Heavy statement jewelry: extravagant diamond necklace set, chandelier earrings. High-glamour red-carpet look."
+  },
+  two_piece: {
+    minimal: "Minimal fusion jewelry: tiny studs, subtle chain. Modern indo-western style.",
+    normal: "Standard fusion jewelry: statement earrings (oxidized or contemporary), maybe a choker. Trendy festive look.",
+    bridal: "Heavy statement fusion jewelry: elaborate choker, bold earrings, stacked metallic bangles, maybe a maang tikka."
+  }
+};
+
+function toggleJewelrySection() {
+  const isChecked = document.getElementById("accessoriesToggle")?.checked;
+  const panel = document.getElementById("jewelrySettingsPanel");
+  if (panel) {
+    if (isChecked) {
+      panel.style.display = "block";
+    } else {
+      panel.style.display = "none";
+      // Auto-set the radio to 'none' if we turn off accessories
+      const noneRadio = document.querySelector('input[name="jewelryMode"][value="none"]');
+      if (noneRadio && !noneRadio.checked) {
+        noneRadio.checked = true;
+      }
+    }
+    updateJewelryPrompt();
+  }
+}
+
+function updateJewelryPrompt() {
+  const modeRadio = document.querySelector('input[name="jewelryMode"]:checked');
+  const mode = modeRadio ? modeRadio.value : "none";
+  
+  const textOptions = document.getElementById("jewelryTextOptions");
+  const imageOptions = document.getElementById("jewelryImageOptions");
+  const promptTextarea = document.getElementById("jewelryPrompt");
+  const promptBlock = document.getElementById("jewelryPromptBlock");
+  
+  // Handle UI visibility
+  if (textOptions && imageOptions) {
+    if (mode === "none") {
+      textOptions.style.display = "none";
+      imageOptions.style.display = "none";
+      if(promptBlock) promptBlock.style.display = "none";
+    } else if (mode === "text") {
+      textOptions.style.display = "block";
+      imageOptions.style.display = "none";
+      if(promptBlock) promptBlock.style.display = "block";
+    } else if (mode === "image") {
+      textOptions.style.display = "none";
+      imageOptions.style.display = "block";
+      if(promptBlock) promptBlock.style.display = "block";
+    }
+  }
+  
+  // Generate Prompt
+  if (!promptTextarea) return;
+  
+  if (mode === "none") {
+    promptTextarea.value = "No Jewelry option selected.";
+  } else if (mode === "text") {
+    const levelSelect = document.getElementById("jewelryLevel");
+    const level = levelSelect ? levelSelect.value : "normal";
+    
+    // Get the base jewelry description for this attire and level
+    let jewelryDesc = "";
+    if (JEWELRY_TEMPLATES[activeAttire] && JEWELRY_TEMPLATES[activeAttire][level]) {
+      jewelryDesc = JEWELRY_TEMPLATES[activeAttire][level];
+    } else {
+      // Fallback if attire is missing
+      jewelryDesc = JEWELRY_TEMPLATES["lehenga"][level]; 
+    }
+    
+    promptTextarea.value = `MANDATORY JEWELRY & ACCESSORIES INCLUSION:
+• Apply the following jewelry styling: ${jewelryDesc}
+• Ensure the jewelry seamlessly matches the outfit's aesthetic and color palette.
+• The jewelry should look physically authentic with correct specular highlights (metals should shine, gems should refract/reflect).`;
+
+  } else if (mode === "image") {
+    const refTextarea = document.getElementById("jewelryReferenceText");
+    const userInstructions = refTextarea && refTextarea.value.trim() ? refTextarea.value.trim() : "Extract and apply the exact jewelry from the referenced image.";
+    
+    promptTextarea.value = `MANDATORY JEWELRY EXTRACTION FROM REFERENCE IMAGE:
+• SECONDARY INPUT DETECTED: A secondary image containing flat-lay jewelry reference has been provided.
+• INSTRUCTION: ${userInstructions}
+• Ensure you ONLY apply the jewelry from the reference. Do not copy the flat-lay background or arrangement.
+• Place the extracted jewelry anatomically correctly onto the model in the final generated image.
+• The extracted jewelry must scale appropriately and cast realistic micro-shadows on the model's skin/garment.`;
+  }
+}
+
 function renderPoseGrid() {
   const container = document.getElementById("posesContainer");
   container.innerHTML = "";
@@ -2385,6 +2522,7 @@ window.selectAttire = function (attireKey) {
   }
 
   updateAllPrompts();
+  updateJewelryPrompt(); // Update jewelry prompt when attire changes
   renderPoseGrid();
 };
 
@@ -2413,6 +2551,7 @@ function initTabs() {
   } catch (e) { console.error("Could not parse recent colors"); }
   renderRecentColors();
 
+  toggleJewelrySection();
   updateAllPrompts();
   renderPoseGrid();
 }
@@ -2484,6 +2623,16 @@ function copyCardFull(poseId, forceDupatta = false) {
   if (markerBlue) markerText += `\n🔵 BLUE MARKED AREA: ${markerBlue}`;
   if (markerGreen) markerText += `\n🟢 GREEN MARKED AREA: ${markerGreen}`;
 
+  // Jewelry Capture
+  const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
+  let jewelryText = "";
+  if (jewelryMode !== "none") {
+      const jPrompt = document.getElementById("jewelryPrompt")?.value;
+      if (jPrompt && !jPrompt.includes("No Jewelry")) {
+          jewelryText = "\n\n" + jPrompt;
+      }
+  }
+
   const outputFormat = document.getElementById("outputFormat")
     ? document.getElementById("outputFormat").value
     : "text";
@@ -2500,6 +2649,7 @@ function copyCardFull(poseId, forceDupatta = false) {
     };
 
     if (dupattaText) fullObj.dupatta_inclusion = dupattaText.trim();
+    if (jewelryText) fullObj.jewelry_inclusion = jewelryText.trim();
 
     if (markerText) {
       fullObj.image_edits = {
@@ -2511,7 +2661,7 @@ function copyCardFull(poseId, forceDupatta = false) {
     full = JSON.stringify(fullObj, null, 2);
   } else {
     if (markerText) markerText = `\n\nImage Edits & Adjustments:${markerText}`;
-    full = `${master}${dupattaText}\n\nGarment and Pose Details:\n${poseTxt}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
+    full = `${master}${dupattaText}${jewelryText}\n\nGarment and Pose Details:\n${poseTxt}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
   }
 
   copyToClipboard(full, () =>
@@ -2543,6 +2693,16 @@ function copyEverything() {
   if (markerBlue) markerText += `\n🔵 BLUE MARKED AREA: ${markerBlue}`;
   if (markerGreen) markerText += `\n🟢 GREEN MARKED AREA: ${markerGreen}`;
 
+  // Jewelry Capture
+  const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
+  let jewelryText = "";
+  if (jewelryMode !== "none") {
+      const jPrompt = document.getElementById("jewelryPrompt")?.value;
+      if (jPrompt && !jPrompt.includes("No Jewelry")) {
+          jewelryText = "\n\n" + jPrompt;
+      }
+  }
+
   const outputFormat = document.getElementById("outputFormat")
     ? document.getElementById("outputFormat").value
     : "text";
@@ -2558,6 +2718,7 @@ function copyEverything() {
     };
 
     if (dupattaText) fullObj.dupatta_inclusion = dupattaText.trim();
+    if (jewelryText) fullObj.jewelry_inclusion = jewelryText.trim();
 
     if (markerText) {
       fullObj.image_edits = {
@@ -2569,7 +2730,7 @@ function copyEverything() {
     full = JSON.stringify(fullObj, null, 2);
   } else {
     if (markerText) markerText = `\n\nImage Edits & Adjustments:${markerText}`;
-    full = `${master}${dupattaText}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
+    full = `${master}${dupattaText}${jewelryText}\n\nAdditional Instructions:\n${additional}\n\nCrucial Requirements:\n${neg}${markerText}`;
   }
   copyToClipboard(full, () =>
     showToast(

@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## 🚀 [v6.1.0] - 2026-03-17
+*The "Jewelry & Branding" Update*
+
+### ✨ Added
+- **`Buzl's Gemini` Rebrand:** Officially rebranded the application from "NanoBanana Pro" to "Buzl's Gemini | Multi-Attire Prompt Generator".
+- **`Custom Jewelry Prompts`:** Engineered a new dedicated prompt generation module for accessories.
+  - Added "Option 1 (Text)" allowing users to select between Minimal, Normal, and Bridal jewelry tiers tailored specifically to the active attire.
+  - Added "Option 2 (Image)" allowing users to instruct the AI to extract and apply exact jewelry pieces from a secondary uploaded reference image.
+  - Wired the new jewelry instructions to seamlessly inject into the Master payload and JSON API outputs.
+
+---
+
 ## 🚀 [v6.0.4] - 2026-03-10
 *The "Prompt Engine Refactor" Update*
 

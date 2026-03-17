@@ -1,13 +1,13 @@
 <h1 align="center">
   <br>
-  🍌 NanoBanana Pro
+  🍌 Buzl's Gemini
   <br>
 </h1>
 
 <h4 align="center">An advanced internal AI prompt engineering tool for photorealistic fashion generation.</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-6.0.4-blueviolet.svg?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-6.1.0-blueviolet.svg?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active_Production-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Deployment-Automated-ff69b4.svg?style=for-the-badge" alt="Deployment">
 </p>
@@ -23,19 +23,22 @@
 
 ## 📖 Overview
 
-**NanoBanana Pro** is a proprietary interface built to bridge the gap between creative fashion design and AI image generation. It algorithmically constructs dense, highly-specific textual prompts (the `physics_base`) needed to guide sophisticated diffusion models (like Imagen or Midjourney) in generating flawless fashion lifestyle photography.
+**Buzl's Gemini** (formerly NanoBanana Pro) is a proprietary interface built to bridge the gap between creative fashion design and AI image generation. It algorithmically constructs dense, highly-specific textual prompts (the `physics_base`) needed to guide sophisticated diffusion models (like Imagen or Midjourney) in generating flawless fashion lifestyle photography.
 
 By strictly controlling garment boundaries, human anatomy, fabric mechanics, and environmental framing, it eliminates AI hallucinations and dramatically reduces prompt-engineering time.
 
 ---
 
-## :sparkles: Key Features (v6.0.3)
+## :sparkles: Key Features (v6.1.0)
+
+### 💎 Custom Jewelry Prompt Engine
+Engineered a new dedicated prompt module for accessories. It allows users to physically instruct the AI to build matching subtle/heavy jewelry specific to the selected attire, OR upload a secondary reference image for exact jewelry extraction (VTO style) onto the model.
 
 ### 🤖 Structured JSON Output Generation
-NanoBanana Pro natively serializes complex, multi-layered prompts into perfectly structured JSON payloads. This allows seamless passing of physics parameters, framing constraints, and AI model system-instructions directly into Gemini and automated backend API scripts (like `automate.mjs`) without string parsing issues.
+Buzl's Gemini natively serializes complex, multi-layered prompts into perfectly structured JSON payloads. This allows seamless passing of physics parameters, framing constraints, and AI model system-instructions directly into Gemini and automated backend API scripts (like `automate.mjs`) without string parsing issues.
 
 ### 🌗 Dual Theme Intelligent UI
-Engineered for both late-night coding and daylight production, NanoBanana Pro features a hardware-accelerated dual-theme UI. Switch instantly between:
+Engineered for both late-night coding and daylight production, the interface features a hardware-accelerated dual-theme UI. Switch instantly between:
 - **Cyber Neon Dark**: Deep obsidian blacks, matte charcoal surfaces, and vibrant cyan/magenta neon accents.
 - **Luxury Fashion Editorial**: Creamy off-whites, champagne gold borders, and deep burgundy elements reminiscent of high-end fashion portals.
 
@@ -48,7 +51,7 @@ Generating clothing on a plastic mannequin requires a completely different AI in
 - **`👤 Real Model Source`**: Triggers a specialized strict-replacement engine. It explicitly commands the AI to **only copy the garment**, while completely hallucinating a brand new, high-end fashion model, preventing the original model's face or body characteristics from carrying over.
 
 ### 📐 Extreme Framing Constraints
-AI models infamously crop images at the shins. NanoBanana Pro dynamically injects strict **Compositional Framing Rules** into every single output prompt:
+AI models infamously crop images at the shins. Buzl's Gemini dynamically injects strict **Compositional Framing Rules** into every single output prompt:
 > *"Must leave ample room for ceiling and floor. DO NOT crop below the ankle."*
 
 ### 🛡️ Anti-Hallucination Visual Rules
@@ -61,7 +64,7 @@ The `STRICT VISUAL RULES` engine enforces:
 
 ## :art: Attire Categories
 
-NanoBanana Pro natively understands the physics, draping, and terminology of **10 distinct garment styles**:
+Buzl's Gemini natively understands the physics, draping, and terminology of **10 distinct garment styles**:
 
 1. 🌸 **Anarkali** - Flowing, majestic volume
 2. ✨ **Lehenga** - Heavy embroidery and structured skirts

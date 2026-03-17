@@ -2633,9 +2633,11 @@ function copyCardFull(poseId, forceDupatta = false) {
   if (markerGreen) markerText += `\n🟢 GREEN MARKED AREA: ${markerGreen}`;
 
   // Jewelry Capture
+  const accessoriesToggle = document.getElementById("accessoriesToggle")?.checked;
   const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
   let jewelryText = "";
-  if (jewelryMode !== "none") {
+  
+  if (accessoriesToggle && jewelryMode !== "none") {
       const jPrompt = document.getElementById("jewelryPrompt")?.value;
       if (jPrompt && !jPrompt.includes("No Jewelry")) {
           jewelryText = "\n\n" + jPrompt;
@@ -2703,9 +2705,11 @@ function copyEverything() {
   if (markerGreen) markerText += `\n🟢 GREEN MARKED AREA: ${markerGreen}`;
 
   // Jewelry Capture
+  const accessoriesToggle = document.getElementById("accessoriesToggle")?.checked;
   const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
   let jewelryText = "";
-  if (jewelryMode !== "none") {
+  
+  if (accessoriesToggle && jewelryMode !== "none") {
       const jPrompt = document.getElementById("jewelryPrompt")?.value;
       if (jPrompt && !jPrompt.includes("No Jewelry")) {
           jewelryText = "\n\n" + jPrompt;

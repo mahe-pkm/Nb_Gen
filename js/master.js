@@ -2190,8 +2190,15 @@ function updateAllPrompts() {
 
   let accDesc = "";
   if (state.accs) {
-    // Enforcing exactly one minimal accessory string for strict consistency across all generations
-    accDesc = `\nACCESSORIES ON: Model is styled with minimal elegant jewelry (simple stud earrings, minimal simple chain). Maintain this exact jewelry consistently.`;
+    // Check if a custom jewelry mode is active
+    const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
+    if (jewelryMode === "none") {
+      accDesc = `\nACCESSORIES: DO NOT retain any original jewelry/accessories from the input image. Model is styled with minimal elegant jewelry (simple stud earrings, minimal simple chain). Maintain this exact jewelry consistently.`;
+    } else {
+      accDesc = `\nACCESSORIES: DO NOT retain any original jewelry/accessories from the input image. Apply custom jewelry settings as defined below.`;
+    }
+  } else {
+    accDesc = `\nACCESSORIES: Model wears NO jewelry or accessories. You MUST remove any existing jewelry from the input image.`;
   }
 
   const inputSource = document.getElementById("inputSource").value;
@@ -2422,6 +2429,7 @@ function updateJewelryPrompt() {
     }
     
     promptTextarea.value = `MANDATORY JEWELRY & ACCESSORIES INCLUSION:
+• CRITICAL: You MUST remove and IGNORE any existing jewelry or accessories from the original input image.
 • Apply the following jewelry styling: ${jewelryDesc}
 • Ensure the jewelry seamlessly matches the outfit's aesthetic and color palette.
 • The jewelry should look physically authentic with correct specular highlights (metals should shine, gems should refract/reflect).`;
@@ -2431,6 +2439,7 @@ function updateJewelryPrompt() {
     const userInstructions = refTextarea && refTextarea.value.trim() ? refTextarea.value.trim() : "Extract and apply the exact jewelry from the referenced image.";
     
     promptTextarea.value = `MANDATORY JEWELRY EXTRACTION FROM REFERENCE IMAGE:
+• CRITICAL: You MUST remove and IGNORE any existing jewelry or accessories from the original input garment image.
 • SECONDARY INPUT DETECTED: A secondary image containing flat-lay jewelry reference has been provided.
 • INSTRUCTION: ${userInstructions}
 • Ensure you ONLY apply the jewelry from the reference. Do not copy the flat-lay background or arrangement.

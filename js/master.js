@@ -2206,8 +2206,12 @@ function updateAllPrompts() {
 
   if (inputSource === "model") {
     physicsBaseText = physicsBaseText.replace(
-      /CONTEXT: The input image is a MANNEQUIN reference.\r?\nTASK: "Dress" a real Indian female model in this exact garment./,
-      "CONTEXT: The input image features a REAL PERSON wearing the garment.\nTASK: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the person's face, body type, skin tone, jewelry, pose, or background. Completely replace the person with a professional high-end fashion model as specified below, wearing the exact garment.",
+      /CONTEXT: The input image is a MANNEQUIN reference\./,
+      "CONTEXT: The input image features a REAL PERSON wearing the garment."
+    );
+    physicsBaseText = physicsBaseText.replace(
+      /TASK: "Dress" a real Indian female model in this exact garment\./,
+      "TASK: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the person's face, body type, skin tone, jewelry, pose, or background. Completely replace the person with a professional high-end fashion model as specified below, wearing the exact garment."
     );
   }
 

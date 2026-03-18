@@ -2219,9 +2219,21 @@ function updateAllPrompts() {
     );
   }
 
+  const resToggle = document.getElementById("resolutionToggle");
+  const resValue = resToggle ? resToggle.value : "8k";
+
+  let resInstruction = "";
+  if (resValue === "8k") {
+    resInstruction = "CRITICAL RESOLUTION INSTRUCTION: You MUST generate the image in true 8K ULTRA-HIGH DEFINITION (maximum possible megapixels). Do NOT output low-resolution 1.5K or heavily compressed images.";
+  } else if (resValue === "4k") {
+    resInstruction = "CRITICAL RESOLUTION INSTRUCTION: You MUST generate the image in high-quality 4K resolution. Ensure crisp details and high fidelity. Do NOT output 1.5K.";
+  } else {
+    resInstruction = "RESOLUTION: Standard 1.5K resolution is acceptable. You may prioritize speed over maximum resolution.";
+  }
+
   const finalMaster =
     physicsBaseText +
-    `\n\nGENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality.\nEnsure the layout is strictly vertical/portrait (2:3 or 3:4).\n\n/// SECONDARY SUBJECT DETAILS & ISOLATION ///\n${modelDesc}, warm pleasant expression, high-end editorial photography lighting.\nFOOTWEAR: Model MUST wear closed footwear ONLY. Ensure footwear is cropped out or hidden by the garment flow.${accDesc}\nCLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
+    `\n\nGENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality.\n\n${resInstruction}\n\nEnsure the layout is strictly vertical/portrait (2:3 or 3:4).\n\n/// SECONDARY SUBJECT DETAILS & ISOLATION ///\n${modelDesc}, warm pleasant expression, high-end editorial photography lighting.\nFOOTWEAR: Model MUST wear closed footwear ONLY. Ensure footwear is cropped out or hidden by the garment flow.${accDesc}\nCLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
 
   const bgColorInput = document.getElementById("bgColor");
   const customBgColor =
@@ -2259,7 +2271,11 @@ function updateAllPrompts() {
 
   const finalAdditional = `Set the scene in a high-end commercial fashion studio.\nThe background must be a pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.\nPlease use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.\nEnsure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.\nCrucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
 
-  let finalNegative = "blurry, pixelated, bad structure, extra limbs, extra fingers, missing limbs, watermarks, text, signatures, low res, plastic look, oil painting, cartoon, CGI, smooth fabrics (unless silk), flat embroidery, soft/melted beads";
+  let finalNegative = "compressed, blurry, pixelated, bad structure, extra limbs, extra fingers, missing limbs, watermarks, text, signatures, plastic look, oil painting, cartoon, CGI, smooth fabrics (unless silk), flat embroidery, soft/melted beads";
+
+  if (resValue === "8k" || resValue === "4k") {
+    finalNegative = "1.5k resolution, 1080p, low res, low resolution, " + finalNegative;
+  }
 
   if (inputSource === "model") {
     finalNegative += ", original face, likeness of input model, original identity, facial recognition, exact original person";
@@ -2276,6 +2292,7 @@ function updateAllPrompts() {
   window.currentJsonState = window.currentJsonState || { poses: {} };
   window.currentJsonState.master_prompt = {
     task: "Generate a high-end commercial fashion catalog photograph where fabric physics and embroidery detail depth are indistinguishable from reality.",
+    resolution_instruction: resInstruction,
     layout: "Strictly vertical/portrait (2:3 or 3:4) orientation.",
     style_and_physics_base: physicsBaseText,
     subject_details: `${modelDesc}, warm pleasant expression, high-end editorial photography lighting.`,

@@ -29,15 +29,24 @@
 
     <div class="app-header" style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Buzl's Gemini <span>| Multi-Attire Generator</span></h1>
-        <div
-            style="display: flex; align-items: center; gap: 12px; background: var(--surface-hover); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);">
-            <span id="themeLabel"
-                style="font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: 0.5px;">CYBER
-                NEON</span>
-            <label class="toggle-switch" style="margin: 0;">
-                <input type="checkbox" id="themeToggleCheckbox" onchange="toggleTheme()">
-                <span class="slider"></span>
-            </label>
+        
+        <div style="display: flex; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 8px; background: var(--surface-hover); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);">
+                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px;">RES:</span>
+                <select id="resolutionToggle" onchange="updateAllPrompts()" style="font-size: 13px; font-weight: 600; background: transparent; border: none; color: var(--primary-color); padding: 0; outline: none; cursor: pointer;">
+                    <option value="8k">8K ULTRA</option>
+                    <option value="4k">4K HIGH</option>
+                    <option value="1.5k">1.5K FAST</option>
+                </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; background: var(--surface-hover); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color);">
+                <span id="themeLabel" style="font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: 0.5px;">CYBER NEON</span>
+                <label class="toggle-switch" style="margin: 0;">
+                    <input type="checkbox" id="themeToggleCheckbox" onchange="toggleTheme()">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     </div>
 

@@ -2207,15 +2207,15 @@ function updateAllPrompts() {
   if (inputSource === "model") {
     physicsBaseText = physicsBaseText.replace(
       /CONTEXT: The input image is a MANNEQUIN reference\./,
-      "CONTEXT: The input image features a REAL PERSON wearing the garment."
+      "CONTEXT: The input image features a REAL PERSON, but you MUST treat them as a lifeless MANNEQUIN proxy."
     );
     physicsBaseText = physicsBaseText.replace(
       /TASK: "Dress" a real Indian female model in this exact garment\./,
-      "TASK: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the person's face, body type, skin tone, jewelry, pose, or background. Completely replace the person with a professional high-end fashion model as specified below, wearing the exact garment."
+      "TASK: Treat the input person as a faceless mannequin dummy. Completely REPLACE their identity and face with a BRAND NEW professional high-end fashion model, wearing the exact garment."
     );
     physicsBaseText = physicsBaseText.replace(
       /RETAIN THE IDENTICAL FACE, SKIN TONE, AND BODY PROPORTIONS\. MUST LOCK THE FIRST SUCCESSFUL GENERATION'S MODEL EVERY TIME\./,
-      "DO NOT RETAIN THE INPUT PERSON'S FACE. YOU MUST GENERATE A COMPLETELY NEW MODEL IDENTITY."
+      "YOU MUST GENERATE A COMPLETELY NEW MODEL IDENTITY. DO NOT RETAIN THE INPUT PERSON'S FACE OR LIKENESS."
     );
   }
 

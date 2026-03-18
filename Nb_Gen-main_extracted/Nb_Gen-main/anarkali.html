@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NanoBanana Pro – Anarkali Prompt Control Panel</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>NanoBanana Pro <span style="font-weight: 400; color: var(--text-secondary);">&nbsp;|&nbsp; Anarkali Control
+                Panel</span></h1>
+
+        <!-- MASTER PROMPT -->
+        <div class="block">
+            <h2>Master Prompt</h2>
+            <textarea id="masterPrompt"
+                readonly>ROLE: EXPERT FASHION PHOTOGRAPHER & TEXTILE FORENSICS EXPERT.
+CONTEXT: The input image is a MANNEQUIN reference.
+TASK: "Dress" a real Indian female model in this exact garment.
+
+/// PHASE 1: UNIVERSAL FABRIC & CRAFT ANALYSIS (MANDATORY) ///
+You must dynamically ANALYZE the input image to determine the physics engine:
+
+STEP A: IDENTIFY FABRIC PHYSICS
+• IF sheer/fluid (Georgette/Chiffon/Net) -> RENDER: Soft micro-folds, translucency, air interaction.
+• IF structured/textured (Raw Silk/Organza/Tussar) -> RENDER: Crisp folds, slight stiffness, visible weave/slubs.
+• IF heavy/absorbent (Velvet/Brocade) -> RENDER: Deep shadows, light absorption, soft sheen.
+
+STEP B: IDENTIFY CRAFT & DEPTH
+• IF work is RAISED (Zardosi/Beads/Stones) -> RENDER: High 3D relief, cast shadows on fabric.
+• IF work is METAL/GOLD (Zari/Sequins) -> RENDER: **REFLECTIVE METALLIC SURFACE**. It must shine, not look like yellow thread.
+• IF work is FLAT (Thread/Print/Kalamkari) -> RENDER: Flush with fabric surface, following fabric contours.
+
+CRITICAL REQUIREMENT - MACRO DEFINITION (v3.1):
+1.  **NO BLENDING:** Embroidery elements must NOT melt into each other.
+2.  **BEAD SEPARATION:** You must render the tiny GAP between individual beads/stones.
+3.  **MATERIAL DISTINCTION:** Glass beads must look glossy; Zari must look metallic; Thread must look matte.
+4.  **EDGE SHARPNESS:** The edges of the motif must be razor-sharp, not fuzzy or hallucinated.
+
+CRITICAL REQUIREMENT - 98% ACCURACY:
+• Replicate the *exact* observed fabric weight and embroidery density from the input.
+• Do not default to generic "satin" or "print". Use the analysis above.
+
+MODEL & POSE:
+• MODEL: Beautiful Indian female, warm smiling expression, natural skin texture (visible pores).
+• POSE: See specific pose instruction below.
+• FOOTWEAR: CLOSED FOOTWEAR ONLY. Feet must be hidden. NO BARE FEET.
+• ORIENTATION: STRICTLY VERTICAL / PORTRAIT (2:3 or 3:4).
+
+GENERATE: A masterpiece fashion image where the fabric physics and workmanship depth are indistinguishable from reality.</textarea>
+            <button onclick="copyText('masterPrompt')">Copy Master Prompt</button>
+        </div>
+
+        <!-- ADDITIONAL PROMPT -->
+        <div class="block">
+            <h2>Additional Prompt</h2>
+            <textarea id="additionalPrompt" readonly>STUDIO SETTING:
+• BACKGROUND: PURE WHITE BACKGROUND (Hex #FFFFFF). Clean, high-key, seamless commercial photography backdrop.
+• LIGHTING: **COMMERCIAL FASHION + JEWELRY LIGHTING.**
+  - Use a crisp Key Light to create **SPECULAR HIGHLIGHTS** on the embroidery.
+  - The Gold Zardosi/Stones must CATCH THE LIGHT and sparkle (glint).
+  - Do NOT make the lighting too soft/flat. We need contrast to show the metallic nature of the work.
+
+CONSISTENCY:
+• Maintain the exact model identity (face, body, hair) across all generations.
+• Hair: Elegant, loose, soft waves. Must not obscure neckline or shoulder embroidery.
+• Skin: High-fidelity texture, no plastic smoothing.</textarea>
+            <button onclick="copyText('additionalPrompt')">Copy Additional Prompt</button>
+        </div>
+
+        <!-- DUPATTA PROMPT (Optional) -->
+        <div class="block" style="border-left: 4px solid #d946ef;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 style="margin-bottom: 0;">Dupatta Prompt (Optional)</h2>
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                            name="dupattaStyle" value="none" checked onchange="updateDupattaPrompt()"> None</label>
+                    <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                            name="dupattaStyle" value="left" onchange="updateDupattaPrompt()"> Left</label>
+                    <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                            name="dupattaStyle" value="right" onchange="updateDupattaPrompt()"> Right</label>
+                    <label style="color: #fff; font-size: 13px; cursor: pointer;"><input type="radio"
+                            name="dupattaStyle" value="full" onchange="updateDupattaPrompt()"> Full/Open</label>
+                </div>
+            </div>
+            <textarea id="dupattaPrompt" readonly>No Dupatta selected.</textarea>
+            <button onclick="copyText('dupattaPrompt')" style="background-color: #d946ef;">Copy Dupatta Prompt</button>
+        </div>
+
+        <!-- NEGATIVE PROMPT -->
+        <div class="block">
+            <h2>Negative Prompt</h2>
+            <textarea id="negativePrompt"
+                readonly>blurry, low quality, pixelated, distorted features, bad anatomy, extra limbs, missing limbs, watermark, text, signature, plastic skin, oil painting, cartoon, cgi, render, smooth fabric, satin finish, matte zardosi, flat embroidery, soft beads, embroidery substitution, fused beads, thread instead of beads, melted sequins</textarea>
+            <button onclick="copyText('negativePrompt')">Copy Negative Prompt</button>
+        </div>
+
+        <!-- POSES -->
+        <div class="block">
+            <h2>Pose Prompts (Select Variation)</h2>
+
+            <div class="poses">
+
+                <!-- Pose 1 -->
+                <div class="pose-card" id="pose1">
+                    <img src="pose1_v1.png" alt="Pose 1">
+                    <strong>Pose 01 — Main Image (Full Front)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose1', 'v1')">V1: Static</div>
+                        <div class="tab" onclick="switchVariation('pose1', 'v2')">V2: Walking</div>
+                        <div class="tab" onclick="switchVariation('pose1', 'v3')">V3: Clasped</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 2 -->
+                <div class="pose-card" id="pose2">
+                    <img src="pose2_v1.png" alt="Pose 2">
+                    <strong>Pose 02 — Secondary (Front Variation)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose2', 'v1')">V1: Weight Shift</div>
+                        <div class="tab" onclick="switchVariation('pose2', 'v2')">V2: Candid</div>
+                        <div class="tab" onclick="switchVariation('pose2', 'v3')">V3: Hand Flow</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 3 -->
+                <div class="pose-card" id="pose3">
+                    <img src="pose3_v1.png" alt="Pose 3">
+                    <strong>Pose 03 — Secondary (Side View)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose3', 'v1')">V1: Profile</div>
+                        <div class="tab" onclick="switchVariation('pose3', 'v2')">V2: Head Turn</div>
+                        <div class="tab" onclick="switchVariation('pose3', 'v3')">V3: Walking</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 4 -->
+                <div class="pose-card" id="pose4">
+                    <img src="pose4_v1.png" alt="Pose 4">
+                    <strong>Pose 04 — Secondary (Back View)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose4', 'v1')">V1: Static</div>
+                        <div class="tab" onclick="switchVariation('pose4', 'v2')">V2: Looking Back</div>
+                        <div class="tab" onclick="switchVariation('pose4', 'v3')">V3: Walking Away</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 5 -->
+                <div class="pose-card" id="pose5">
+                    <img src="pose5_v1.png" alt="Pose 5">
+                    <strong>Pose 05 — Detail (Neckline)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose5', 'v1')">V1: Center</div>
+                        <div class="tab" onclick="switchVariation('pose5', 'v2')">V2: Angled</div>
+                        <div class="tab" onclick="switchVariation('pose5', 'v3')">V3: Context</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 6 -->
+                <div class="pose-card" id="pose6">
+                    <img src="pose6_v1.png" alt="Pose 6">
+                    <strong>Pose 06 — Detail (Sleeve)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose6', 'v1')">V1: Lifted</div>
+                        <div class="tab" onclick="switchVariation('pose6', 'v2')">V2: On Hip</div>
+                        <div class="tab" onclick="switchVariation('pose6', 'v3')">V3: Cuff Adjust</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 7 -->
+                <div class="pose-card" id="pose7">
+                    <img src="pose7_v1.png" alt="Pose 7">
+                    <strong>Pose 07 — Detail (Bodice)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose7', 'v1')">V1: Center</div>
+                        <div class="tab" onclick="switchVariation('pose7', 'v2')">V2: Side Angle</div>
+                        <div class="tab" onclick="switchVariation('pose7', 'v3')">V3: Texture</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+                <!-- Pose 8 -->
+                <div class="pose-card" id="pose8">
+                    <img src="pose8_v1.png" alt="Pose 8">
+                    <strong>Pose 08 — Detail (Skirt)</strong>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchVariation('pose8', 'v1')">V1: Static</div>
+                        <div class="tab" onclick="switchVariation('pose8', 'v2')">V2: Holding Edge</div>
+                        <div class="tab" onclick="switchVariation('pose8', 'v3')">V3: Gentle Turn</div>
+                    </div>
+                    <textarea readonly></textarea>
+                    <div class="button-group" style="flex-wrap: wrap;">
+                        <button onclick="copyFullPrompt(this)">Copy Full</button>
+                        <button onclick="copyFullPrompt(this, true)"
+                            style="background-color: #d946ef; border-color: #d946ef;">+ Dupatta</button>
+                        <button class="secondary" onclick="copyPoseOnly(this)">Pose Only</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- GEMINI SYSTEM INSTRUCTION (PERSONALIZATION) -->
+        <div class="block" style="border-left: 4px solid #8b5cf6;">
+            <h2 style="color: #c4b5fd;">⚙️ Gemini Personalization (System Instruction)</h2>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
+                To "lock in" the Physics Engine, paste this into your <strong>Gemini Settings > System
+                    Instructions</strong> (if available) or create a custom "Gem":
+            </p>
+            <textarea id="systemPrompt" readonly
+                style="height: 120px; background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6;">SYSTEM ROLE: You are an expert Fashion Photographer & Textile Physicist.
+CORE DIRECTIVE: You will receive images of garments on MANNEQUINS. Your ONLY task is to "dress" a beautiful Indian model in that EXACT garment.
+PHYSICS RULES:
+1. RAW SILK must look woven/slubby, never smooth like satin.
+2. ZARDOSI must look 3D/Raised used micro-shadows, never flat/printed.
+3. SEQUINS must have specular glint (jewelry lighting), never matte.
+4. BEADS are HARD OBJECTS. Do NOT render them as thread/stitch. They must cast shadows.
+5. OUTPUT must be STRICT PORTRAIT MODE (Vertical) always.</textarea>
+            <button onclick="copyText('systemPrompt')" style="background: #8b5cf6; color: white;">Copy System
+                Instruction</button>
+        </div>
+
+        <!-- INPUT PREP (LIGHTROOM) -->
+        <div class="block" style="border-left: 4px solid #3b82f6;">
+            <h2 style="color: #93c5fd;">📸 Pro Tip: Input Image Prep (Lightroom)</h2>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
+                Gemini cannot see details that are buried in shadow or blur. For best results, use the
+                <a href="./Gemini_Texture_Revealer.xmp" download
+                    style="color: #4ade80; text-decoration: underline; font-weight: bold;">Gemini Texture
+                    Revealer.xmp</a>
+                preset or manually apply these settings:
+            </p>
+            <div
+                style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e2e8f0;">
+                <div>TEXTURE: <span style="color: #4ade80;">+60</span> (ULTRA: Maximum Weave Pop)</div>
+                <div>CLARITY: <span style="color: #4ade80;">+35</span> (ULTRA: Contrast Separation)</div>
+                <div>DEHAZE: <span style="color: #4ade80;">+20</span> (Cuts Glare/Softness)</div>
+                <div>WHITES: <span style="color: #4ade80;">+20</span> (Forces Specular Glint)</div>
+                <div>SHARPNESS: <span style="color: #4ade80;">+60</span> (Radius 1.4, Detail 75)</div>
+                <div>NOISE REDUCTION: <span style="color: #f87171;">0</span> (CRITICAL: RAW Grain Required)</div>
+            </div>
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+                    <strong>Step 2: Export</strong>
+                </p>
+                <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                    <a href="./Gemini_Optimizer_Export.lrtemplate" download
+                        style="color: #60a5fa; text-decoration: underline; font-weight: bold; font-size: 13px;">
+                        ⬇️ Normal (4000px / 5MB)
+                    </a>
+                    <a href="./Gemini_Max_Fidelity_Export.lrtemplate" download
+                        style="color: #f472b6; text-decoration: underline; font-weight: bold; font-size: 13px;">
+                        ⬇️ MAX (6000px / 20MB)
+                    </a>
+                </div>
+                <p style="color: #9ca3af; font-size: 11px; margin-top: 8px; font-style: italic;">
+                    *Tip: Start with "Normal". Only use "MAX" if Gemini specifically requests higher resolution.
+                </p>
+            </div>
+        </div>
+
+        <!-- TROUBLESHOOTING PROMPT -->
+        <div class="block" style="border-color: #fca5a5; background-color: #2a1515;">
+            <h2 style="color: #fca5a5;">⚠️ Nano Banana Fallback (Troubleshooting)</h2>
+            <textarea id="fallbackPrompt" readonly>FALLBACK OVERRIDE — PREVIOUS OUTPUT FAILED ORIENTATION.
+
+Retry with strict enforcement:
+• Portrait / Vertical orientation ONLY
+• Height must exceed width
+• Camera locked vertically
+• Do not rotate, crop, or reframe
+• Regenerate until portrait orientation is achieved</textarea>
+            <button onclick="copyText('fallbackPrompt')" style="background-color: #dc2626;">Copy Fallback
+                Prompt</button>
+        </div>
+
+
+        <div class="footer">
+            <button onclick="copyEverything()">Copy Master + Additional + Negative</button>
+            <p style="margin-top: 24px; color: var(--text-secondary); font-size: 13px; opacity: 0.7;">
+                Created by Mahendran D | v3.16 (Auto-Subfolder Export)
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- External JS -->
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

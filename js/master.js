@@ -1,6 +1,6 @@
 const GLOBAL_PHYSICS_PROMPT = `ROLE: EXPERT FASHION PHOTOGRAPHER & TEXTILE FORENSICS EXPERT.
 CONTEXT: The input image is a MANNEQUIN reference.
-The input mannequin image already contains a natural garment pose. The generated model must closely follow the same pose structure visible in the input image. Body orientation, arm placement, and garment fall should remain consistent with the input pose. The pose instructions below act only as refinement guidance. Do NOT dramatically change the pose if the input image already matches the described pose. Maintain similar stance, posture, and garment flow from the source image.
+The input mannequin image provides a structural baseline that is similar to the desired pose, but it is NOT perfect. You must rely on the written pose instructions below as your PRIMARY directive to correct and perfect the model's final posture, arm placement, and body orientation. Use the input image ONLY to understand the authentic fabric physics, weight, garment flow, and structural details. You MUST flawlessly preserve the exact sleeve length, embroidery placement, intricate works, neckline, and all architectural details of the dress. Combine these flawless garment details and physics from the input image with the exact new pose described in the text. Do NOT let the imperfect pose of the input mannequin override the specific written pose instructions.
 TASK: "Dress" a real Indian female model in this exact garment.
 OUTPUT INSTRUCTION: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the mannequin, the background, or any text. Completely replace the mannequin with a lifelike human model as specified below. The final image must look like it was shot in a high-end studio.
 
@@ -2260,7 +2260,7 @@ function updateAllPrompts() {
   const finalAdditional = `Set the scene in a high-end commercial fashion studio.\nThe background must be a pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.\nPlease use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.\nEnsure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.\nCrucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
 
   let finalNegative = "blurry, pixelated, bad structure, extra limbs, extra fingers, missing limbs, watermarks, text, signatures, low res, plastic look, oil painting, cartoon, CGI, smooth fabrics (unless silk), flat embroidery, soft/melted beads";
-  
+
   if (inputSource === "model") {
     finalNegative += ", original face, likeness of input model, original identity, facial recognition, exact original person";
   }
@@ -2405,47 +2405,47 @@ function toggleJewelrySection() {
 function updateJewelryPrompt() {
   const modeRadio = document.querySelector('input[name="jewelryMode"]:checked');
   const mode = modeRadio ? modeRadio.value : "none";
-  
+
   const textOptions = document.getElementById("jewelryTextOptions");
   const imageOptions = document.getElementById("jewelryImageOptions");
   const promptTextarea = document.getElementById("jewelryPrompt");
   const promptBlock = document.getElementById("jewelryPromptBlock");
-  
+
   // Handle UI visibility
   if (textOptions && imageOptions) {
     if (mode === "none") {
       textOptions.style.display = "none";
       imageOptions.style.display = "none";
-      if(promptBlock) promptBlock.style.display = "none";
+      if (promptBlock) promptBlock.style.display = "none";
     } else if (mode === "text") {
       textOptions.style.display = "block";
       imageOptions.style.display = "none";
-      if(promptBlock) promptBlock.style.display = "block";
+      if (promptBlock) promptBlock.style.display = "block";
     } else if (mode === "image") {
       textOptions.style.display = "none";
       imageOptions.style.display = "block";
-      if(promptBlock) promptBlock.style.display = "block";
+      if (promptBlock) promptBlock.style.display = "block";
     }
   }
-  
+
   // Generate Prompt
   if (!promptTextarea) return;
-  
+
   if (mode === "none") {
     promptTextarea.value = "No Jewelry option selected.";
   } else if (mode === "text") {
     const levelSelect = document.getElementById("jewelryLevel");
     const level = levelSelect ? levelSelect.value : "normal";
-    
+
     // Get the base jewelry description for this attire and level
     let jewelryDesc = "";
     if (JEWELRY_TEMPLATES[activeAttire] && JEWELRY_TEMPLATES[activeAttire][level]) {
       jewelryDesc = JEWELRY_TEMPLATES[activeAttire][level];
     } else {
       // Fallback if attire is missing
-      jewelryDesc = JEWELRY_TEMPLATES["lehenga"][level]; 
+      jewelryDesc = JEWELRY_TEMPLATES["lehenga"][level];
     }
-    
+
     promptTextarea.value = `MANDATORY JEWELRY & ACCESSORIES INCLUSION:
 • CRITICAL: You MUST remove and IGNORE any existing jewelry or accessories from the original input image.
 • Apply the following jewelry styling: ${jewelryDesc}
@@ -2455,7 +2455,7 @@ function updateJewelryPrompt() {
   } else if (mode === "image") {
     const refTextarea = document.getElementById("jewelryReferenceText");
     const userInstructions = refTextarea && refTextarea.value.trim() ? refTextarea.value.trim() : "Extract and apply the exact jewelry from the referenced image.";
-    
+
     promptTextarea.value = `MANDATORY JEWELRY EXTRACTION FROM REFERENCE IMAGE:
 • CRITICAL: You MUST remove and IGNORE any existing jewelry or accessories from the original input garment image.
 • SECONDARY INPUT DETECTED: A secondary image containing flat-lay jewelry reference has been provided.
@@ -2593,7 +2593,22 @@ function showToast(message) {
   const container = document.getElementById("toast-container");
   const toast = document.createElement("div");
   toast.className = "toast";
-  toast.textContent = message;
+
+  const msgText = document.createElement("div");
+  msgText.textContent = message;
+  msgText.style.fontWeight = "bold";
+
+  const proText = document.createElement("div");
+  proText.textContent = "✨ Use Pro mode for Better results";
+  proText.style.fontSize = "0.8rem";
+  proText.style.color = "var(--primary-color, #8b5cf6)";
+  proText.style.marginTop = "4px";
+
+  toast.appendChild(msgText);
+  toast.appendChild(proText);
+
+  toast.style.borderRadius = "12px";
+
   container.appendChild(toast);
   setTimeout(() => {
     toast.remove();
@@ -2654,12 +2669,12 @@ function copyCardFull(poseId, forceDupatta = false) {
   const accessoriesToggle = document.getElementById("accessoriesToggle")?.checked;
   const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
   let jewelryText = "";
-  
+
   if (accessoriesToggle && jewelryMode !== "none") {
-      const jPrompt = document.getElementById("jewelryPrompt")?.value;
-      if (jPrompt && !jPrompt.includes("No Jewelry")) {
-          jewelryText = "\n\n" + jPrompt;
-      }
+    const jPrompt = document.getElementById("jewelryPrompt")?.value;
+    if (jPrompt && !jPrompt.includes("No Jewelry")) {
+      jewelryText = "\n\n" + jPrompt;
+    }
   }
 
   const outputFormat = document.getElementById("outputFormat")
@@ -2726,12 +2741,12 @@ function copyEverything() {
   const accessoriesToggle = document.getElementById("accessoriesToggle")?.checked;
   const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
   let jewelryText = "";
-  
+
   if (accessoriesToggle && jewelryMode !== "none") {
-      const jPrompt = document.getElementById("jewelryPrompt")?.value;
-      if (jPrompt && !jPrompt.includes("No Jewelry")) {
-          jewelryText = "\n\n" + jPrompt;
-      }
+    const jPrompt = document.getElementById("jewelryPrompt")?.value;
+    if (jPrompt && !jPrompt.includes("No Jewelry")) {
+      jewelryText = "\n\n" + jPrompt;
+    }
   }
 
   const outputFormat = document.getElementById("outputFormat")

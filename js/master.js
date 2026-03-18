@@ -2217,7 +2217,7 @@ function updateAllPrompts() {
 
   const finalMaster =
     physicsBaseText +
-    `\n\nGENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality.\nEnsure the layout is strictly vertical/portrait (2:3 or 3:4).\n\n/// SECONDARY SUBJECT DETAILS & ISOLATION ///\n${modelDesc}, warm pleasant expression, high-end editorial photography lighting.\nFOOTWEAR: Ensure footwear is cropped out or hidden by the garment flow.${accDesc}\nCLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
+    `\n\nGENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality.\nEnsure the layout is strictly vertical/portrait (2:3 or 3:4).\n\n/// SECONDARY SUBJECT DETAILS & ISOLATION ///\n${modelDesc}, warm pleasant expression, high-end editorial photography lighting.\nFOOTWEAR: Model MUST wear closed footwear ONLY. Ensure footwear is cropped out or hidden by the garment flow.${accDesc}\nCLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
 
   const bgColorInput = document.getElementById("bgColor");
   const customBgColor =
@@ -2265,7 +2265,7 @@ function updateAllPrompts() {
     layout: "Strictly vertical/portrait (2:3 or 3:4) orientation.",
     style_and_physics_base: physicsBaseText,
     subject_details: `${modelDesc}, warm pleasant expression, high-end editorial photography lighting.`,
-    footwear: `Ensure footwear is cropped out or hidden by the garment flow.${accDesc}`,
+    footwear: `Model MUST wear closed footwear ONLY. Ensure footwear is cropped out or hidden by the garment flow.${accDesc}`,
     clean_edges:
       "Maintain razor-sharp subject separation from background for professional masking.",
   };

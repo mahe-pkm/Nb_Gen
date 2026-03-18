@@ -1,46 +1,17 @@
-const GLOBAL_PHYSICS_PROMPT = `ROLE: EXPERT FASHION PHOTOGRAPHER & TEXTILE FORENSICS EXPERT.
-CONTEXT: The input image is a MANNEQUIN reference.
-The input mannequin image already contains a natural garment pose. The generated model must closely follow the same pose structure visible in the input image. Body orientation, arm placement, and garment fall should remain consistent with the input pose. The pose instructions below act only as refinement guidance. Do NOT dramatically change the pose if the input image already matches the described pose. Maintain similar stance, posture, and garment flow from the source image.
-TASK: "Dress" a real Indian female model in this exact garment.
-OUTPUT INSTRUCTION: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the mannequin, the background, or any text. Completely replace the mannequin with a lifelike human model as specified below. The final image must look like it was shot in a high-end studio.
+const GLOBAL_PHYSICS_PROMPT = `ROLE: EXPERT FASHION PHOTOGRAPHER.
+CONTEXT: Input is a MANNEQUIN or MODEL wearing a garment.
+TASK: "Dress" a lifelike fashion model in this EXACT garment. 
+RULES:
+1. ONLY copy garments. Completely replace original subject/mannequin, background, and identity. 
+2. Retain identical body orientation, pose structure, and garment flow from input. Pose instructions below are for refinement only.
+3. Final image must be a high-end studio commercial shot, strict portrait format.
 
-/// PHASE 1: UNIVERSAL FABRIC & CRAFT ANALYSIS (MANDATORY) ///
-You must dynamically ANALYZE the input image to determine the physics engine:
-
-STEP A: IDENTIFY FABRIC PHYSICS
-• IF sheer/fluid (Georgette/Chiffon/Net) -> RENDER: Soft micro-folds, translucency, air interaction.
-• IF structured/textured (Raw Silk/Organza/Tussar) -> RENDER: Crisp folds, slight stiffness, visible weave/slubs.
-• IF heavy/absorbent (Velvet/Brocade) -> RENDER: Deep shadows, light absorption, soft sheen.
-
-STEP B: IDENTIFY CRAFT & DEPTH
-• IF work is RAISED (Zardosi/Beads/Stones) -> RENDER: High 3D relief, cast shadows on fabric.
-• IF work is METAL/GOLD (Zari/Sequins) -> RENDER: **REFLECTIVE METALLIC SURFACE**. It must shine, not look like yellow thread.
-• IF work is FLAT (Thread/Print/Kalamkari) -> RENDER: Flush with fabric surface, following fabric contours.
-
-CRITICAL REQUIREMENT - MACRO DEFINITION (v3.1):
-1. **NO BLENDING:** Embroidery elements must NOT melt into each other.
-2. **BEAD SEPARATION:** You must render the tiny GAP between individual beads/stones.
-3. **MATERIAL DISTINCTION:** Glass beads must look glossy; Zari must look metallic; Thread must look matte.
-4. **EDGE SHARPNESS:** The edges of the motif must be razor-sharp, not fuzzy or hallucinated.
-5. **THREAD TENSION:** Render the interwoven zari thread tension and micro-shadows cast by individual zari loops.
-
-CRITICAL REQUIREMENT - 98% ACCURACY:
-• Replicate the *exact* observed fabric weight and embroidery density from the input.
-• Do not default to generic "satin" or "print". Use the analysis above.
-
-MODEL & POSE:
-• MODEL: Beautiful Indian female, natural relaxed expression, high-end editorial photography.
-• POSE: See specific pose instruction below.
-• FOOTWEAR: CLOSED FOOTWEAR ONLY. Feet must be hidden. NO hidden footwear.
-• ORIENTATION: STRICTLY VERTICAL / PORTRAIT (2:3 or 3:4).
-
-STRICT VISUAL RULES:
-• CHARACTER CONSISTENCY: KEEP FACE AND MODEL AESTHETIC STRICTLY CONSISTENT ACROSS POSES. RETAIN THE IDENTICAL FACE, SKIN TONE, AND BODY PROPORTIONS. MUST LOCK THE FIRST SUCCESSFUL GENERATION'S MODEL EVERY TIME.
-• NO Hallucinations: Do not add jewelry, belts, or latkans unless present in source.
-• NO Amputations: Hands and fingers must be elegant, complete, and anatomically correct.
-• CLOSED FOOTWEAR ONLY: Feet fully concealed.
-• WATERMARK SPACE: LEAVE EMPTY NEGATIVE SPACE (approx 300x300px) in the TOP-LEFT corner for watermark placement. Do not place important details or face in this area.
-GENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality AND HIGH FIDELITY 4K RESOLUTION, MAX POSSIBLE RESOLUTION.`;
+FABRIC & CRAFT PHYSICS:
+- Sheer (Georgette/Net): Soft micro-folds, translucent.
+- Structured (Silk/Organza): Crisp folds, visible weave.
+- Raised Work (Zardosi/Beads): 3D relief, cast micro-shadows, sharp edges, gap between beads.
+- Metallic (Zari/Sequins): Highly reflective, glossy/metallic (not yellow thread).
+- Replicate exact weight, tension, and embroidery density. NO blending/fuzzy textures.`;
 
 const ATTIRE_TYPES = {
   chudidhar: "Chudidhar",
@@ -55,2009 +26,193 @@ const ATTIRE_TYPES = {
   anarkali: "Anarkali",
 };
 
-const POSE_LIBRARY = {
-  chudidhar: [
-    {
-      id: "pose1",
-      img: "chudidhar/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Chudidhar flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The kurta reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The kurta hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "chudidhar/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Chudidhar is accentuated on the weight-bearing side. The folds of the kurta bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "chudidhar/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the kurta flare. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The kurta is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "chudidhar/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Chudidhar is the focal line. The kurta's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the kurta forward; the trailing movement pushes it back.\r\nGARMENT: The kurta creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "chudidhar/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "chudidhar/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the kurta as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The kurta remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The kurta swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Chudidhar ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "chudidhar/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "chudidhar/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "chudidhar/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Chudidhar.\r\nShot on 35mm lens.',
-          img: "chudidhar/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "chudidhar/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "chudidhar/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "chudidhar/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "chudidhar/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "chudidhar/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "chudidhar/pose7_v1.png",
-      title: "Pose 07 — Detail (Kurta Midsection)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the kurta (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "chudidhar/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "chudidhar/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "chudidhar/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "chudidhar/pose8_v1.png",
-      title: "Pose 08 — Detail (Kurta Flare & Bottoms)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the kurta gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "chudidhar/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the kurta flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the kurta fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "chudidhar/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The kurta is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Chudidhar.\r\nFRAMING: Wide enough to contain the flared hem edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "chudidhar/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "chudidhar/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "chudidhar/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "chudidhar/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "chudidhar/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  half_saree: [
-    {
-      id: "pose1",
-      img: "half_saree/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Half Saree flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "half_saree/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Half Saree is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "half_saree/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Half Saree skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "half_saree/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Half Saree is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "half_saree/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "half_saree/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Half Saree ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "half_saree/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "half_saree/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "half_saree/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Half Saree.\r\nShot on 35mm lens.',
-          img: "half_saree/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "half_saree/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "half_saree/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "half_saree/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "half_saree/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "half_saree/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "half_saree/pose7_v1.png",
-      title: "Pose 07 — Detail (Blouse & Vaddanam)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "half_saree/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "half_saree/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "half_saree/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "half_saree/pose8_v1.png",
-      title: "Pose 08 — Detail (Pleats & Flare)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "half_saree/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "half_saree/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Half Saree.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "half_saree/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "half_saree/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "half_saree/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "half_saree/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "half_saree/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  lehenga: [
-    {
-      id: "pose1",
-      img: "lehenga/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Lehenga flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "lehenga/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Lehenga is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "lehenga/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Lehenga skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "lehenga/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Lehenga is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "lehenga/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "lehenga/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Lehenga ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "lehenga/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "lehenga/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "lehenga/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Lehenga.\r\nShot on 35mm lens.',
-          img: "lehenga/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "lehenga/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "lehenga/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "lehenga/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "lehenga/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "lehenga/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "lehenga/pose7_v1.png",
-      title: "Pose 07 — Detail (Blouse & mid-section)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "lehenga/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "lehenga/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "lehenga/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "lehenga/pose8_v1.png",
-      title: "Pose 08 — Detail (Lehenga Skirt)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "lehenga/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "lehenga/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Lehenga.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "lehenga/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "lehenga/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "lehenga/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "lehenga/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "lehenga/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  long_gown: [
-    {
-      id: "pose1",
-      img: "long_gown/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Long Gown flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "long_gown/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Long Gown is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "long_gown/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Long Gown skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "long_gown/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Long Gown is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "long_gown/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "long_gown/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Long Gown ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "long_gown/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "long_gown/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "long_gown/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Long Gown.\r\nShot on 35mm lens.',
-          img: "long_gown/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "long_gown/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "long_gown/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "long_gown/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "long_gown/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "long_gown/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "long_gown/pose7_v1.png",
-      title: "Pose 07 — Detail (Bodice & mid-section)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "long_gown/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "long_gown/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "long_gown/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "long_gown/pose8_v1.png",
-      title: "Pose 08 — Detail (Gown Flare)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "long_gown/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "long_gown/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Long Gown.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "long_gown/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "long_gown/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "long_gown/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "long_gown/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "long_gown/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  saree_ready: [
-    {
-      id: "pose1",
-      img: "ready_saree/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Ready to Wear Saree flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "ready_saree/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Ready to Wear Saree is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "ready_saree/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Ready to Wear Saree skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "ready_saree/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Ready to Wear Saree is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "ready_saree/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "ready_saree/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Ready to Wear Saree ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "ready_saree/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "ready_saree/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "ready_saree/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Ready to Wear Saree.\r\nShot on 35mm lens.',
-          img: "ready_saree/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "ready_saree/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "ready_saree/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "ready_saree/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "ready_saree/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "ready_saree/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "ready_saree/pose7_v1.png",
-      title: "Pose 07 — Detail (Blouse & Pallu)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "ready_saree/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "ready_saree/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "ready_saree/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "ready_saree/pose8_v1.png",
-      title: "Pose 08 — Detail (Saree Pleats)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "ready_saree/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "ready_saree/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Ready to Wear Saree.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "ready_saree/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "ready_saree/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "ready_saree/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "ready_saree/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "ready_saree/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  semi_lehenga: [
-    {
-      id: "pose1",
-      img: "semi_lehenga/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Semi Lehenga flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "semi_lehenga/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Semi Lehenga is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "semi_lehenga/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Semi Lehenga skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "semi_lehenga/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Semi Lehenga is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "semi_lehenga/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "semi_lehenga/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Semi Lehenga ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "semi_lehenga/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "semi_lehenga/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "semi_lehenga/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Semi Lehenga.\r\nShot on 35mm lens.',
-          img: "semi_lehenga/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "semi_lehenga/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "semi_lehenga/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "semi_lehenga/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "semi_lehenga/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "semi_lehenga/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "semi_lehenga/pose7_v1.png",
-      title: "Pose 07 — Detail (Blouse & mid-section)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "semi_lehenga/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "semi_lehenga/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "semi_lehenga/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "semi_lehenga/pose8_v1.png",
-      title: "Pose 08 — Detail (Lehenga Skirt)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "semi_lehenga/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "semi_lehenga/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Semi Lehenga.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "semi_lehenga/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "semi_lehenga/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "semi_lehenga/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "semi_lehenga/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "semi_lehenga/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  sharara: [
-    {
-      id: "pose1",
-      img: "sharara/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Sharara flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "sharara/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Sharara is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "sharara/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Sharara skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "sharara/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Sharara is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "sharara/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "sharara/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Sharara ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "sharara/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "sharara/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "sharara/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Sharara.\r\nShot on 35mm lens.',
-          img: "sharara/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "sharara/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "sharara/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "sharara/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "sharara/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "sharara/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "sharara/pose7_v1.png",
-      title: "Pose 07 — Detail (Kurta Midsection)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "sharara/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "sharara/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "sharara/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "sharara/pose8_v1.png",
-      title: "Pose 08 — Detail (Sharara Pants Flare)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "sharara/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "sharara/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Sharara.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "sharara/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "sharara/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "sharara/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "sharara/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "sharara/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  tops: [
-    {
-      id: "pose1",
-      img: "tops/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Tops flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The top reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The top hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "tops/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Tops is accentuated on the weight-bearing side. The folds of the top bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "tops/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the top. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The top is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "tops/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Tops is the focal line. The top's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the fabric forward; the trailing movement pushes it back.\r\nGARMENT: The top creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "tops/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "tops/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the top as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The lower hem remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The top swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Tops ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "tops/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "tops/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "tops/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Tops.\r\nShot on 35mm lens.',
-          img: "tops/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "tops/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "tops/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "tops/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "tops/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "tops/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "tops/pose7_v1.png",
-      title: "Pose 07 — Detail (Midsection)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "tops/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "tops/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "tops/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "tops/pose8_v1.png",
-      title: "Pose 08 — Detail (Lower Hem)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the fabric gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "tops/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the top flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "tops/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The top is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Tops.\r\nFRAMING: Wide enough to contain the flared hem edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "tops/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "tops/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "tops/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "tops/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "tops/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  two_piece: [
-    {
-      id: "pose1",
-      img: "two_piece/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Two Piece flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "two_piece/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Two Piece is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "two_piece/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Two Piece skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "two_piece/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Two Piece is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "two_piece/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "two_piece/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Two Piece ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "two_piece/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "two_piece/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "two_piece/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Two Piece.\r\nShot on 35mm lens.',
-          img: "two_piece/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "two_piece/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "two_piece/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "two_piece/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "two_piece/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "two_piece/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "two_piece/pose7_v1.png",
-      title: "Pose 07 — Detail (Top Midsection)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "two_piece/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "two_piece/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "two_piece/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "two_piece/pose8_v1.png",
-      title: "Pose 08 — Detail (Bottoms)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "two_piece/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "two_piece/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Two Piece.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "two_piece/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "two_piece/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "two_piece/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "two_piece/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "two_piece/pose9_v3.png",
-        },
-      ],
-    },
-  ],
-  anarkali: [
-    {
-      id: "pose1",
-      img: "anarkali/pose1_v1.png",
-      title: "Pose 01 — Main Image (Full Front)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model falls into a perfectly symmetrical, static standing position. Shoulders are pulled back and down, chest neutral. Weight is evenly distributed on both feet. Arms are completely relaxed at the sides, hanging straight down without creating wrinkles in the bodice fabric.\r\nGARMENT: The Anarkali flows straight down in its intended A-line or flared silhouette. No motion blur, no wind. The hemline settles naturally on the floor (or above footwear).\r\nFRAMING: Center-weighted composition. Head at the top third, hem near the bottom.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose1_v1.png",
-        },
-        {
-          label: "V2: Walking",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model captured mid-stride walking directly toward the camera. the stance is slightly forward, engaging the lower silhouette muscles which press gently against the fabric. Shoulders remain level. Arms swing naturally—one slightly forward, one slightly back—adding dynamic life to the pose.\r\nGARMENT: The skirt reacts to the forward motion, creating soft, fluid ripples at the hem. Fabric drapes over the forward stance, highlighting the material's weight and flow.\r\nFRAMING: Full length, ensuring the movement doesn't crop the hem or head.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose1_v2.png",
-        },
-        {
-          label: "V3: Clasped",
-          text: "Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model stands tall and elegant. Hands are brought together at the mid-section, fingers lightly interlaced or one palm resting softly in the other. Elbows bend slightly outward, creating a small triangular gap between arm and mid-section that defines the mid-section silhouette.\r\nGARMENT: The bodice is pulled slightly taut across the upper bodice due to the arm position, showing garment fit along the torso. The skirt hangs vertically with undisturbed natural garment volume.\r\nFRAMING: Emphasis on the hourglass shape created by the arms and mid-section.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose1_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose2",
-      img: "anarkali/pose2_v1.png",
-      title: "Pose 02 — Secondary (Front Variation)",
-      variations: [
-        {
-          label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Anarkali is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "anarkali/pose2_v1.png",
-        },
-        {
-          label: "V2: Candid",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Candid, editorial style. Model's silhouette faces forward, but her head is turned 30 degrees to the side, looking off-camera. Posture is relaxed but upright. Shoulders serve as a hanger for the garment, showcasing the shoulder fit perfectly.\r\nGARMENT: The neckline sits perfectly flat against the upper neckline area. Sleeves hang straight without twisting. Details of the yoke are front and center.\r\nFRAMING: Intimate but full-length, making the viewer feel like an observer.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose2_v2.png",
-        },
-        {
-          label: "V3: Hand Flow",
-          text: "Full fashion shot in strict portrait orientation.\r\nPOSE: Model interacts with the garment. One hand extends downwards to gently brush or hold the side flare of the Anarkali skirt. The fingers slightly lift the fabric, revealing its weight and texture. The other arm remains neutral. Head tilts slightly towards the active hand.\r\nGARMENT: The skirt is physically manipulated, creating tension lines from the hand downwards. This demonstrates the volume and abundance of cloth.\r\nFRAMING: Focus on the hand-to-fabric interaction while keeping Full length visible.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose2_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose3",
-      img: "anarkali/pose3_v1.png",
-      title: "Pose 03 — Secondary (Side View)",
-      variations: [
-        {
-          label: "V1: Profile",
-          text: "Full fashion shot in strict portrait orientation, complete side profile (90-degree view).\r\nPOSE: Model stands perpendicular to the camera. The profile silhouette is sharp. The posture axis is straight, face direction up. Arms hang directly down the side seam of the silhouette, partially obscuring the mid-section but revealing the sleeve embroidery profile.\r\nGARMENT: The side seam of the Anarkali is the focal line. The skirt's flare is visible from front to back, showing the A-line gradient. The bodice and back fit are clearly profiled.\r\nFRAMING: Full height profile, from head to floor.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose3_v1.png",
-        },
-        {
-          label: "V2: Head Turn",
-          text: "Full fashion shot in strict portrait orientation, side view.\r\nPOSE: silhouette remains in strict 90-degree profile. However, the model turns her upper silhouette to look over her shoulder, making direct eye contact with the camera. The face direction is slightly dropped, creating an alluring, slight head tilt. Shoulders stay profile.\r\nGARMENT: The twisting of the upper silhouette might cause slight shifting in the neckline, revealing fabric behavior. The side profile of the sleeve is prominent.\r\nFRAMING: Captures the connection between the model's gaze and the dress's silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose3_v2.png",
-        },
-        {
-          label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "anarkali/pose3_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose4",
-      img: "anarkali/pose4_v1.png",
-      title: "Pose 04 — Secondary (Back View)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: "Full fashion shot in strict portrait orientation, back-facing view.\r\nPOSE: Model stands with her back completely to the camera. Shoulders are square and even. Head is straight, looking forward (away from camera). Hair is swept entirely to one side or tied up to reveal the upper back details.\r\nGARMENT: Focus is 100% on the back design—zipper concealment, embroidery on the upper back, and the full radial spread of the skirt as it hits the floor.\r\nFRAMING: Symmetrical backshot.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose4_v1.png",
-        },
-        {
-          label: "V2: Looking Back",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model turns her head back over her shoulder to acknowledge the camera. The bodice twists very slightly (max 10 degrees) to facilitate the upper silhouette turn, but the lower silhouette remains largely back-facing.\r\nGARMENT: The slight bodice twist creates gentle diagonal stress lines in the bodice back, showing fabric fit. The skirt remains largely static.\r\nFRAMING: Focus on the back details with the added context of the model's profile.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose4_v2.png",
-        },
-        {
-          label: "V3: Walking Away",
-          text: "Full fashion shot in strict portrait orientation, back view.\r\nPOSE: Model is walking away from the camera. The movement is captured from behind. The garment sways naturally with the step. Shoulders move in opposition to the mid-section.\r\nGARMENT: The skirt swishes dynamically. The hemline flips up slightly at the heels. The back panels of the Anarkali ripple with motion.\r\nFRAMING: Capturing the departure, focusing on the flow of the dress in motion.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.",
-          img: "anarkali/pose4_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose5",
-      img: "anarkali/pose5_v1.png",
-      title: "Pose 05 — Detail (Neckline)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nFRAMING: TIGHT crop from just above the head to the mid-section.\r\nPOSE: Model stands perfectly still, facing front. Arms are held slightly away from the bodice to ensure they don't block the side-mid-section embroidery. Shoulders dropped.\r\nGARMENT: High-resolution focus on the NECKLINE, yoke embroidery, and upper bodice detailing. Every sequin, thread, and texture variance on the bodice must be sharp.\r\nShot on 100mm lens.",
-          img: "anarkali/pose5_v1.png",
-        },
-        {
-          label: "V2: Angled",
-          text: 'Upper-silhouette close-up in strict portrait orientation.\r\nANGLE: "Heroic" low angle. Camera looks up from mid-bodice level towards the face.\r\nPOSE: Model looks down into the lens with a powerful, confident expression. face direction slightly lifted.\r\nGARMENT: This angle emphasizes the fall of the fabric over the upper bodice and the upper neckline detailing of the neckline. It showcases the majesty of the Anarkali.\r\nShot on 35mm lens.',
-          img: "anarkali/pose5_v2.png",
-        },
-        {
-          label: "V3: Context",
-          text: "Upper-silhouette close-up in strict portrait orientation.\r\nPOSE: Model brings one hand up to gently touch her upper neckline area or a necklace. The hand is relaxed, elegant—not gripping. It adds a sense of scale and human touch.\r\nGARMENT: The hand position draws the eye immediately to the upper neckline and shoulder embroidery. The sleeve fabric gathers slightly at the elbow due to the raised arm.\r\nShot on 80mm lens.",
-          img: "anarkali/pose5_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose6",
-      img: "anarkali/pose6_v1.png",
-      title: "Pose 06 — Detail (Sleeve)",
-      variations: [
-        {
-          label: "V1: Lifted",
-          text: "Portrait-orientation close-up focusing on one sleeve.\r\nFRAMING: Crop focusing on one arm from shoulder to fingertips.\r\nPOSE: Model lifts one arm slightly to the side (approx 45 degrees), separating it from the silhouette. The hand is relaxed, palm facing inward or down.\r\nGARMENT: This pose isolates the sleeve to show its silhouette, transparency (if any), and the density of embroidery down the length of the arm.\r\nShot on 100mm lens.",
-          img: "anarkali/pose6_v1.png",
-        },
-        {
-          label: "V2: On mid-section",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: Model places her hand firmly on her natural mid-section. The elbow bends outward at an acute angle.\r\nGARMENT: The bending of the arm causes the sleeve fabric to "bunch" and fold at the inner elbow—this is critical for showing fabric stiffness/softness. The wrist cuff embroidery is brought close to the bodice embroidery for texture comparison.\r\nShot on 100mm lens.',
-          img: "anarkali/pose6_v2.png",
-        },
-        {
-          label: "V3: Cuff Adjust",
-          text: 'Portrait-orientation close-up on sleeve.\r\nPOSE: The model uses her opposite hand to adjust the cuff/bangle of the primary arm. It\'s a "getting ready" micro-action.\r\nGARMENT: Focus is on the cuff interaction. The tension of the opposite hand pulling slightly on the sleeve cuff reveals the stitching strength and button details (if any).\r\nShot on 100mm lens.',
-          img: "anarkali/pose6_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose7",
-      img: "anarkali/pose7_v1.png",
-      title: "Pose 07 — Detail (Bodice)",
-      variations: [
-        {
-          label: "V1: Center",
-          text: 'Mid-fashion shot in strict portrait orientation.\r\nFRAMING: Crop starting from the upper neckline area and ending at the upper mid-section. Detail shot focusing on the garment fabric.\r\nPOSE: Static fontal stance.\r\nGARMENT: This is the "Texture Shot." Focus is entirely on the TRANSITION from the bodice (yoke) to the skirt (kalidar). The gathers, pleats, and waistband stitching are the heroes.\r\nShot on 100mm lens.',
-          img: "anarkali/pose7_v1.png",
-        },
-        {
-          label: "V2: Side Angle",
-          text: "Mid-fashion shot in strict portrait orientation.\r\nPOSE: Model turns 45 degrees to the side. One arm is lifted high (as if fixing hair) to completely expose the side-seam and side-seam area.\r\nGARMENT: Shows the side zipper implementation, the side fit, and how the embroidery patterns align (or stop) at the side seam.\r\nShot on 80mm lens.",
-          img: "anarkali/pose7_v2.png",
-        },
-        {
-          label: "V3: Texture",
-          text: "Mid-length macro shot in vertical orientation.\r\nFRAMING: Extreme close-up on a specific patch of heavy embroidery or complex joinery in the midsection.\r\nPOSE: Stationary.\r\nGARMENT: Macro details of gold thread work (zari), sequins, or prints. The weave of the fabric base should be visible.\r\nShot on 100mm lens.",
-          img: "anarkali/pose7_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose8",
-      img: "anarkali/pose8_v1.png",
-      title: "Pose 08 — Detail (Skirt)",
-      variations: [
-        {
-          label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "anarkali/pose8_v1.png",
-        },
-        {
-          label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "anarkali/pose8_v2.png",
-        },
-        {
-          label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Anarkali.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. DO NOT crop below the ankle.',
-          img: "anarkali/pose8_v3.png",
-        },
-      ],
-    },
-    {
-      id: "pose9",
-      img: "anarkali/pose9_v1.png",
-      title: "Pose 09 — Detail (Side Closeup Profile)",
-      variations: [
-        {
-          label: "V1: Clean Profile",
-          text: "Upper-silhouette close-up in strict portrait orientation. FULL SIDE PROFILE (90-degree view). \r\nPOSE: Model stands perfectly straight, perpendicular to the camera. Arms rest naturally down the side, emphasizing the exact side-seam and shoulder alignment. \r\nGARMENT: High-resolution focus on the side silhouette of the upper bodice, side-neckline depth, and the complete sleeve fall. Perfect for showcasing shoulder/sleeve embroidery transitions. \r\nShot on 100mm macro lens.",
-          img: "anarkali/pose9_v1.png",
-        },
-        {
-          label: "V2: Forward Lean",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: Model leans slightly forward, with focus and intense gaze straight ahead (off-camera). The front shoulder drops minimally, creating a dynamic diagonal line across the upper back. \r\nGARMENT: The fabric pulls slightly across the upper back, demonstrating fit tension and shoulder-yoke detailing. The sleeve shifts gracefully backwards. \r\nShot on 80mm lens.",
-          img: "anarkali/pose9_v2.png",
-        },
-        {
-          label: "V3: Over-Shoulder Glimpse",
-          text: "Upper-silhouette close-up in strict portrait orientation, side profile. \r\nPOSE: While the bodice remains in strict 90-degree profile, the model turns her head gently towards the camera, face direction lowered, offering an intimate, side-eyed glance over her shoulder. \r\nGARMENT: The twisting of the upper silhouette highlights the collar/nape detailing and contrasts the profile of the sleeve against the back fabric. \r\nShot on 80mm lens.",
-          img: "anarkali/pose9_v3.png",
-        },
-      ],
-    },
-  ],
+
+// Optimized dynamic pose generator
+const ATTIRE_TRAITS = {
+  chudidhar: {
+    l: "kurta hem and fitted chudidhar pants",
+    d: "Kurta flows straight naturally. Visible gathers (churis) at the ankles.",
+    mf: "Kurta ripples softly, revealing the fitted pants underneath.",
+    as: "Side slits of the kurta open slightly, showing pant details.",
+    sp: "Straight-cut side profile showing alignment of kurta slit and fitted leg.",
+    mt: "Straight kurta trails slightly with motion, without blooming excessively.",
+    mb: "Kurta sways naturally against the fitted pants with each step.",
+    sd: "Kurta swishes slightly, showing its distinct straight cut."
+  },
+  anarkali: {
+    l: "flared anarkali skirt",
+    d: "Anarkali flows in its intended A-line full flared silhouette.",
+    mf: "Flared skirt reacts to forward motion, draping gracefully.",
+    as: "Anarkali flare is accentuated on the weight-bearing side.",
+    sp: "A-line gradient and massive flare are profiled clearly.",
+    mt: "Massive skirt flies out dynamically behind the model.",
+    mb: "Flared back panels ripple dynamically with motion.",
+    sd: "Anarkali is fully flared out by centrifugal force into a wide circle."
+  },
+  lehenga: {
+    l: "lehenga skirt",
+    d: "Lehenga skirt flows in its vast flared silhouette.",
+    mf: "Lehenga skirt reacts to forward motion gracefully.",
+    as: "Skirt flare is accentuated on the weight-bearing side.",
+    sp: "Lehenga's A-line gradient and massive flare are profiled clearly.",
+    mt: "Heavy lehenga skirt flies out dynamically behind the model.",
+    mb: "Flared back panels ripple dynamically with motion.",
+    sd: "Lehenga is fully flared out by centrifugal force into a wide circle."
+  },
+  half_saree: {
+    l: "pleated skirt and voni drape",
+    d: "Half Saree skirt flows in its A-line silhouette.",
+    mf: "Pleated skirt reacts to forward motion gracefully.",
+    as: "Skirt flare is accentuated on the weight-bearing side.",
+    sp: "Skirt A-line gradient is profiled clearly.",
+    mt: "Skirt flies out dynamically behind the model.",
+    mb: "Pleated back panels ripple dynamically with motion.",
+    sd: "Skirt is fully flared out by centrifugal force into a wide circle."
+  },
+  long_gown: {
+    l: "long gown flowing skirt",
+    d: "Long Gown flows in its intended A-line sweeping silhouette.",
+    mf: "Gown skirt reacts to forward motion, draping gracefully.",
+    as: "Gown flare is accentuated on the weight-bearing side.",
+    sp: "A-line gradient and sweep are profiled clearly.",
+    mt: "Gown skirt trails out dynamically behind the model.",
+    mb: "Back panels ripple dynamically with motion.",
+    sd: "Gown is fully flared out by centrifugal force into a wide sweep."
+  },
+  two_piece: {
+    l: "bottom trousers/skirt",
+    d: "Two-piece set flows maintaining its co-ord structure.",
+    mf: "Garment reacts to walking stride naturally.",
+    as: "Co-ord pieces bunch slightly on the relaxed side.",
+    sp: "Side fit and separation of the two pieces is clearly visible.",
+    mt: "Fabric catches the air slightly but retains co-ord structure.",
+    mb: "Back structures of top and bottom move in unison.",
+    sd: "Garment moves fluidly without forced circular flare."
+  },
+  tops: {
+    l: "top's lower hem",
+    d: "The top hangs naturally to its designated length.",
+    mf: "Top catches brief wind, rippling at the hem.",
+    as: "Top shifts slightly, highlighting side contours.",
+    sp: "Top's side seam and back fit are profiled clearly.",
+    mt: "Hem trails slightly with walking motion.",
+    mb: "Back panel sways naturally.",
+    sd: "Top hem fans out mildly without exaggerated flaring."
+  },
+  sharara: {
+    l: "flared sharara pants",
+    d: "Sharara flows with wide flared pants from the knees down.",
+    mf: "Flared pants ripple with forward motion.",
+    as: "Sharara pants bunch elegantly on the relaxed leg.",
+    sp: "Flared pants side profile is clearly visible.",
+    mt: "Wide pants trail beautifully with walking motion.",
+    mb: "Back folds of the sharara sway with each step.",
+    sd: "Sharara pants flare out elegantly with the spin."
+  },
+  saree_ready: {
+    l: "pre-stitched saree pleats",
+    d: "Ready saree flows maintaining exact pre-draped pleats.",
+    mf: "Pallu and pleats react to forward motion.",
+    as: "Saree drape creates natural diagonal lines and asymmetry.",
+    sp: "Saree pallu drape and pleat fall profiled clearly.",
+    mt: "Pallu trails dynamically behind the model.",
+    mb: "Back drape falls elegantly.",
+    sd: "Saree pleats open slightly with spin."
+  },
+  semi_lehenga: {
+    l: "lehenga skirt",
+    d: "Lehenga flows in its vast flared silhouette.",
+    mf: "Lehenga skirt reacts to forward motion gracefully.",
+    as: "Skirt flare is accentuated on the weight-bearing side.",
+    sp: "Lehenga's A-line gradient and massive flare are profiled clearly.",
+    mt: "Heavy lehenga skirt flies out dynamically behind the model.",
+    mb: "Flared back panels ripple dynamically with motion.",
+    sd: "Lehenga is fully flared out by centrifugal force into a wide circle."
+  }
 };
 
+function generatePoses(attireKey) {
+  const t = ATTIRE_TRAITS[attireKey] || ATTIRE_TRAITS.tops;
+  return [
+    {
+      id: "pose1", title: "Pose 01 — Main (Full Front)",
+      variations: [
+        { label: "V1: Static", img: attireKey+"/pose1_v1.png", text: `FRAMING: Full-body vertical portrait, center-weighted, 80mm. NEVER crop below ankle.\nPOSE: Front-facing, symmetrical static stance. Relaxed arms.\nGARMENT: ${t.d} No motion blur.`},
+        { label: "V2: Walking", img: attireKey+"/pose1_v2.png", text: `FRAMING: Full-body vertical portrait, 50mm. NEVER crop below ankle.\nPOSE: Front-facing, mid-stride walking. Arms swinging naturally.\nGARMENT: ${t.mf}`},
+        { label: "V3: Clasped", img: attireKey+"/pose1_v3.png", text: `FRAMING: Full-body vertical portrait, 80mm. NEVER crop below ankle.\nPOSE: Front-facing. Hands lightly clasped at waist, elbows slightly outward.\nGARMENT: Bodice taut across waist. ${t.d}`}
+      ]
+    },
+    {
+      id: "pose2", title: "Pose 02 — Secondary (Front Var)",
+      variations: [
+        { label: "V1: Weight Shift", img: attireKey+"/pose2_v1.png", text: `FRAMING: Full-body vertical portrait, 80mm. NEVER crop below ankle.\nPOSE: Front-facing contrapposto stance. Weight on one leg, relaxed arms.\nGARMENT: ${t.as}`},
+        { label: "V2: Candid", img: attireKey+"/pose2_v2.png", text: `FRAMING: Full-body vertical portrait, 50mm. NEVER crop below ankle.\nPOSE: Torso front-facing, head turned 30 degrees off-camera.\nGARMENT: Neckline and yoke details lie flat and are clearly visible.`},
+        { label: "V3: Hand Flow", img: attireKey+"/pose2_v3.png", text: `FRAMING: Full-body vertical portrait, 80mm. NEVER crop below ankle.\nPOSE: Hands gently lift/brush the ${t.l}, creating tension. Head tilts toward hand.\nGARMENT: Fabric pulled gently revealing weight and texture.`}
+      ]
+    },
+    {
+      id: "pose3", title: "Pose 03 — Secondary (Side)",
+      variations: [
+        { label: "V1: Profile", img: attireKey+"/pose3_v1.png", text: `FRAMING: Full-body vertical profile, 80mm. NEVER crop below ankle.\nPOSE: 90-degree true side profile. Straight posture. Arms straight down side-seam.\nGARMENT: ${t.sp}`},
+        { label: "V2: Head Turn", img: attireKey+"/pose3_v2.png", text: `FRAMING: Full-body vertical profile, 80mm. NEVER crop below ankle.\nPOSE: 90-degree torso profile, head turned over shoulder making eye contact.\nGARMENT: ${t.sp}`},
+        { label: "V3: Walking", img: attireKey+"/pose3_v3.png", text: `FRAMING: Full-body vertical profile. Wide enough for trailing hem. 50mm.\nPOSE: Dynamic 90-degree walking profile, mid-step.\nGARMENT: ${t.mt}`}
+      ]
+    },
+    {
+      id: "pose4", title: "Pose 04 — Secondary (Back)",
+      variations: [
+        { label: "V1: Static", img: attireKey+"/pose4_v1.png", text: `FRAMING: Full back-facing vertical portrait, 80mm. NEVER crop below ankle.\nPOSE: Symmetrical standing, back to camera. Hair swept aside.\nGARMENT: Focus 100% on back design, zipper, back embroidery, and back ${t.l}.`},
+        { label: "V2: Looking Back", img: attireKey+"/pose4_v2.png", text: `FRAMING: Full back-facing vertical portrait, 80mm. NEVER crop below ankle.\nPOSE: Turn head over shoulder towards camera. Torso twists slightly (10 deg).\nGARMENT: Torso twist creates gentle stress lines showing back fit.`},
+        { label: "V3: Walk Away", img: attireKey+"/pose4_v3.png", text: `FRAMING: Full back-facing vertical portrait, 50mm. NEVER crop below ankle.\nPOSE: Walking away from camera.\nGARMENT: ${t.mb}`}
+      ]
+    },
+    {
+      id: "pose5", title: "Pose 05 — Detail (Neckline)",
+      variations: [
+        { label: "V1: Center", img: attireKey+"/pose5_v1.png", text: `FRAMING: Tight upper-body crop (head to mid-section). 100mm macro.\nPOSE: Front-facing, still. Arms away from bodice.\nGARMENT: High-res focus on neckline, yoke, and upper bodice detailing.`},
+        { label: "V2: Angled", img: attireKey+"/pose5_v2.png", text: `FRAMING: Low-angle upper-body crop. 35mm lens.\nPOSE: Looking down into lens, confident expression.\nGARMENT: Highlights fabric fall over upper bodice.`},
+        { label: "V3: Context", img: attireKey+"/pose5_v3.png", text: `FRAMING: Upper-body crop. 80mm lens.\nPOSE: One hand gently touching upper neckline/necklace area.\nGARMENT: Hand draws eye to shoulder/neckline embroidery.`}
+      ]
+    },
+    {
+      id: "pose6", title: "Pose 06 — Detail (Sleeve)",
+      variations: [
+        { label: "V1: Lifted", img: attireKey+"/pose6_v1.png", text: `FRAMING: Close-up on one arm (shoulder to fingertips). 100mm.\nPOSE: Arm lifted 45 degrees sideways.\nGARMENT: Isolates sleeve to show exact shape, transparency, and embroidery.`},
+        { label: "V2: On waist", img: attireKey+"/pose6_v2.png", text: `FRAMING: Close-up on sleeve. 100mm.\nPOSE: Hand firmly on natural waist, elbow outward.\nGARMENT: Shows sleeve fabric bunching at inner elbow and wrist cuff.`},
+        { label: "V3: Cuff Adjust", img: attireKey+"/pose6_v3.png", text: `FRAMING: Close-up on sleeve cuffs. 100mm.\nPOSE: Opposite hand adjusting cuff/bangle of primary arm.\nGARMENT: Highlights sleeve tension, edge stitching, and cuff details.`}
+      ]
+    },
+    {
+      id: "pose7", title: "Pose 07 — Detail (Midsection)",
+      variations: [
+        { label: "V1: Center", img: attireKey+"/pose7_v1.png", text: `FRAMING: Mid-body crop (neckline to upper waist). 100mm.\nPOSE: Front-facing static.\nGARMENT: Extreme focus on transition points, waist gathers, pleats, or stitching.`},
+        { label: "V2: Side Angle", img: attireKey+"/pose7_v2.png", text: `FRAMING: Mid-body crop. 80mm.\nPOSE: Torso turned 45 degrees, one arm lifted high (fixing hair).\nGARMENT: Unobstructed view of side-seam, zipper, and side fit.`},
+        { label: "V3: Texture", img: attireKey+"/pose7_v3.png", text: `FRAMING: Extreme macro crop on heavy midsection embroidery or joinery (zari, sequins, prints). 100mm macro.\nGARMENT: Fabric weave and crisp 3D texture strictly visible.`}
+      ]
+    },
+    {
+      id: "pose8", title: "Pose 08 — Detail (Lower Hem)",
+      variations: [
+        { label: "V1: Static", img: attireKey+"/pose8_v1.png", text: `FRAMING: Mid-to-lower body crop (waist to floor). 80mm. NEVER crop below ankle.\nPOSE: Neutral standing.\nGARMENT: Focus on exactly how the ${t.l} falls and gathers at hemline.`},
+        { label: "V2: Hold Edge", img: attireKey+"/pose8_v2.png", text: `FRAMING: Mid-to-lower body crop. 80mm. NEVER crop below ankle.\nPOSE: Model holds edge of ${t.l} pulling it wide.\nGARMENT: Shows full width, fabric fall, and translucency.`},
+        { label: "V3: Gentle Turn", img: attireKey+"/pose8_v3.png", text: `FRAMING: Mid-to-lower body crop. 50mm. NEVER crop below ankle.\nPOSE: Freeze-frame of a gentle twirl/spin.\nGARMENT: ${t.sd}`}
+      ]
+    },
+    {
+      id: "pose9", title: "Pose 09 — Detail (Side Profile)",
+      variations: [
+        { label: "V1: Clean", img: attireKey+"/pose9_v1.png", text: `FRAMING: Upper-silhouette close-up, strict 90-degree profile. 100mm macro.\nPOSE: Arms straight down side-seam.\nGARMENT: High-res focus on side neckline depth, shoulder seam, and sleeve fall.`},
+        { label: "V2: Fwd Lean", img: attireKey+"/pose9_v2.png", text: `FRAMING: Upper-silhouette close-up, side profile. 80mm.\nPOSE: Slight forward lean, intense gaze.\nGARMENT: Fabric pulls across upper back demonstrating fit tension and yoke/shoulder line.`},
+        { label: "V3: Glance", img: attireKey+"/pose9_v3.png", text: `FRAMING: Upper-silhouette close-up, side profile. 80mm.\nPOSE: Torso side-profile, head turned toward camera for intimate glance.\nGARMENT: Twisting highlights collar/nape details and contrasts front vs back.`}
+      ]
+    }
+  ];
+}
+
+const POSE_LIBRARY = {};
+Object.keys(ATTIRE_TRAITS).forEach(key => {
+  POSE_LIBRARY[key] = generatePoses(key);
+});
 function buildPrompt(attire, pose, variation) {
   const attireName = ATTIRE_TYPES[attire] || "Garment";
   const poseObj =
@@ -2166,54 +321,50 @@ function updateAllPrompts() {
     accs: document.getElementById("accessoriesToggle").checked,
   };
 
-  let modelDesc = "Elegant fashion model";
-  if (state.age === "young")
-    modelDesc = "Elegant young adult fashion model (approx 20-25 years)";
-  if (state.age === "adult")
-    modelDesc = "Elegant adult fashion model (approx 28-32 years)";
-  if (state.age === "mature")
-    modelDesc = "Elegant mature fashion model (approx 40-45 years)";
+  let modelDesc = "Fashion model";
+  if (state.age === "young") modelDesc = "Young fashion model (20-25)";
+  if (state.age === "adult") modelDesc = "Adult fashion model (28-32)";
+  if (state.age === "mature") modelDesc = "Mature fashion model (40-45)";
 
-  if (state.look === "indian") modelDesc += ", classic Indian styling";
-  if (state.look === "south_indian")
-    modelDesc += ", authentic South Indian styling, warm tones";
-  if (state.look === "north_indian")
-    modelDesc += ", authentic North Indian styling";
-  if (state.look === "indo_western")
-    modelDesc += ", modern Indo-Western high-fashion look";
+  if (state.look === "indian") modelDesc += ", standard Indian";
+  if (state.look === "south_indian") modelDesc += ", South Indian, warm tones";
+  if (state.look === "north_indian") modelDesc += ", North Indian";
+  if (state.look === "indo_western") modelDesc += ", Indo-Western modern";
 
-  if (state.silhouette === "slim")
-    modelDesc += ", graceful fashion editorial styling.";
-  else if (state.silhouette === "curvy")
-    modelDesc += ", elegant plus-size fashion styling.";
-  else modelDesc += ", regular high-fashion editorial styling.";
+  if (state.silhouette === "slim") modelDesc += ", slim styling.";
+  else if (state.silhouette === "curvy") modelDesc += ", plus-size styling.";
+  else modelDesc += ", regular styling.";
 
   let accDesc = "";
   if (state.accs) {
-    // Check if a custom jewelry mode is active
     const jewelryMode = document.querySelector('input[name="jewelryMode"]:checked')?.value || "none";
     if (jewelryMode === "none") {
-      accDesc = `\nACCESSORIES: DO NOT retain any original jewelry/accessories from the input image. Model is styled with minimal elegant jewelry (simple stud earrings, minimal simple chain). Maintain this exact jewelry consistently.`;
+      accDesc = "\nACCESSORIES: IGNORE original jewelry. Use minimal elegant jewelry matching attire.";
     } else {
-      accDesc = `\nACCESSORIES: DO NOT retain any original jewelry/accessories from the input image. Apply custom jewelry settings as defined below.`;
+      accDesc = "\nACCESSORIES: IGNORE original jewelry. Apply custom jewelry settings below.";
     }
   } else {
-    accDesc = `\nACCESSORIES: Model wears NO jewelry or accessories. You MUST remove any existing jewelry from the input image.`;
+    accDesc = "\nACCESSORIES: MUST REMOVE ALL jewelry. No accessories.";
   }
+
+  let physicsBaseText = GLOBAL_PHYSICS_PROMPT;
+  let finalNegative = "blurry, pixelated, bad structure, extra limbs, extra fingers, missing limbs, watermarks, text, signatures, low res, plastic look, oil painting, cartoon, CGI, smooth fabrics (unless silk), flat embroidery, soft beads, blended texture";
 
   const inputSource = document.getElementById("inputSource").value;
-  let physicsBaseText = GLOBAL_PHYSICS_PROMPT;
-
   if (inputSource === "model") {
-    physicsBaseText = physicsBaseText.replace(
-      /CONTEXT: The input image is a MANNEQUIN reference.\r?\nTASK: "Dress" a real Indian female model in this exact garment./,
-      "CONTEXT: The input image features a REAL PERSON wearing the garment.\nTASK: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the person's face, body type, skin tone, jewelry, pose, or background. Completely replace the person with a professional high-end fashion model as specified below, wearing the exact garment.",
-    );
+    const baseWithoutContext = GLOBAL_PHYSICS_PROMPT.substring(GLOBAL_PHYSICS_PROMPT.indexOf("FABRIC &"));
+    const newContext = `ROLE: EXPERT FASHION PHOTOGRAPHER.
+CONTEXT: Input is a REAL PERSON wearing the garment.
+TASK: "Dress" a lifelike fashion model in this EXACT garment. 
+RULES:
+1. OVERRIDE: Treat the Real Person input as just a mannequin.
+2. ONLY copy the garments. 
+3. CRITICAL ANONYMIZATION: COMPLETELY REPLACE the original person. DO NOT copy face, body, or identity. Generate a NEW, unrecognizable high-end fashion model.\n\n`;
+    physicsBaseText = newContext + baseWithoutContext;
+    finalNegative += ", original face, same identity, original facial features, input person";
   }
 
-  const finalMaster =
-    physicsBaseText +
-    `\n\nGENERATE: A high-end commercial fashion catalog photograph where the fabric physics and embroidery detail depth are indistinguishable from reality.\nEnsure the layout is strictly vertical/portrait (2:3 or 3:4).\n\n/// SECONDARY SUBJECT DETAILS & ISOLATION ///\n${modelDesc}, warm pleasant expression, high-end editorial photography lighting.\nFOOTWEAR: Ensure footwear is cropped out or hidden by the garment flow.${accDesc}\nCLEAN EDGES: Maintain razor-sharp subject separation from background for professional masking.`;
+const finalMaster = physicsBaseText + `\n\nGENERATE: High-end commercial fashion catalog photo.\nLAYOUT: Strict portrait (2:3 or 3:4).\nATTIRE CLASS: ${ATTIRE_TYPES[activeAttire] || activeAttire}\n\n/// SECONDARY SUBJECT ///\n${modelDesc}\nFOOTWEAR: Cropped out or hidden.\n${accDesc}\nCLEAN EDGES: Razor-sharp subject separation.`;
 
   const bgColorInput = document.getElementById("bgColor");
   const customBgColor =
@@ -2249,10 +400,11 @@ function updateAllPrompts() {
     }
   }
 
-  const finalAdditional = `Set the scene in a high-end commercial fashion studio.\nThe background must be a pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.\nPlease use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.\nEnsure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.\nCrucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
+  const finalAdditional = `SCENE: High-end fashion studio.\nBACKGROUND: Pure flat continuous backdrop (${customBgColor}) with zero floor cast shadows.\nLIGHTING: Crisp key lighting for specular glints on embellishments. Global illumination with subsurface scattering.\nDETAILS: Natural sparkle on zardosi/stones. Zero background bleed onto garment.\nCONSISTENCY: Maintain strictly consistent face, silhouette, and hair.`;
 
   document.getElementById("masterPrompt").value = finalMaster;
   document.getElementById("additionalPrompt").value = finalAdditional;
+  document.getElementById("negativePrompt").value = finalNegative;
 
   // Build structured JSON in the background for copying
   window.currentJsonState = window.currentJsonState || { poses: {} };
@@ -2608,7 +760,10 @@ function copyCardFull(poseId, forceDupatta = false) {
 
   const master = document.getElementById("masterPrompt").value;
   const additional = document.getElementById("additionalPrompt").value;
-  const neg = document.getElementById("negativePrompt").value;
+  let neg = document.getElementById("negativePrompt").value;
+  if (document.getElementById("inputSource") && document.getElementById("inputSource").value === "model") {
+      neg += ", original face, same identity, original facial features, input person";
+  }
   const poseTxt = document.getElementById(`ta_${poseId}`).value;
 
   let dupattaText = "";
@@ -2677,7 +832,7 @@ function copyCardFull(poseId, forceDupatta = false) {
 
   copyToClipboard(full, () =>
     showToast(
-      dupattaText ? "Copied Full Prompt (+Dupatta)!" : "Copied Full Prompt!",
+      dupattaText ? "Copied Full Prompt (+Dupatta)! Select Pro Mode in chat." : "Copied Full Prompt! Select Pro Mode in chat.",
     ),
   );
 }
@@ -2685,7 +840,10 @@ function copyCardFull(poseId, forceDupatta = false) {
 function copyEverything() {
   const master = document.getElementById("masterPrompt").value;
   const additional = document.getElementById("additionalPrompt").value;
-  const neg = document.getElementById("negativePrompt").value;
+  let neg = document.getElementById("negativePrompt").value;
+  if (document.getElementById("inputSource") && document.getElementById("inputSource").value === "model") {
+      neg += ", original face, same identity, original facial features, input person";
+  }
 
   let dupattaText = "";
   const dupattaRadio = document.querySelector(
@@ -2748,8 +906,8 @@ function copyEverything() {
   copyToClipboard(full, () =>
     showToast(
       dupattaText
-        ? "Copied All (+Dupatta)!"
-        : "Copied Master + Additional + Negative!",
+        ? "Copied All (+Dupatta)! Select Pro Mode in chat."
+        : "Copied Master+Additional+Negative! Select Pro Mode in chat.",
     ),
   );
 }

@@ -1,0 +1,15 @@
+# Node / Dev scripts
+generate_placeholders.js
+parse_images.js
+optimize_script.js
+update.php
+
+# JSON Data
+required_images.json
+
+# Archives
+*.zip
+
+# OS Generated
+.DS_Store
+Thumbs.db

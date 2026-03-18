@@ -7,7 +7,7 @@
 <h4 align="center">An advanced internal AI prompt engineering tool for photorealistic fashion generation.</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-6.1.0-blueviolet.svg?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-6.2.0-blueviolet.svg?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active_Production-success.svg?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Deployment-Automated-ff69b4.svg?style=for-the-badge" alt="Deployment">
 </p>
@@ -29,7 +29,7 @@ By strictly controlling garment boundaries, human anatomy, fabric mechanics, and
 
 ---
 
-## :sparkles: Key Features (v6.1.0)
+## :sparkles: Key Features (v6.2.0)
 
 ### 💎 Custom Jewelry Prompt Engine
 Engineered a new dedicated prompt module for accessories. It allows users to physically instruct the AI to build matching subtle/heavy jewelry specific to the selected attire, OR upload a secondary reference image for exact jewelry extraction (VTO style) onto the model.

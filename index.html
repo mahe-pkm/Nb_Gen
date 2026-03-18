@@ -215,7 +215,7 @@
                 </div>
             </div>
 
-            <p class="version">Created by Mahendran D | v6.1.0 Ultimate Automation - updated on 17-03-2026 13:17 IST</p>
+            <p class="version">Created by Mahendran D | v6.2.0 Context Engine - updated on 19-03-2026 00:39 IST</p>
         </aside>
 
         <!-- RIGHT MAIN AREA: GENERATOR PANELS -->
@@ -278,8 +278,7 @@
                     <h2>Negative Prompt</h2>
                     <button class="icon-btn" onclick="copyText('negativePrompt')" title="Copy Negative">📋 Copy</button>
                 </div>
-                <textarea id="negativePrompt" <textarea id="negativePrompt"
-                    readonly>Ensure the image is free from blurry or pixelated areas, bad structure, extra features, missing features, watermarks, text, or signatures. Avoid a plastic look, oil painting styles, cartoons, CGI, or rendered appearances. Do not use smooth fabrics where texture is expected, flat embroidery, or soft/melted beads.</textarea>
+                <textarea id="negativePrompt" readonly>Ensure the image is free from blurry or pixelated areas, bad structure, extra features, missing features, watermarks, text, or signatures. Avoid a plastic look, oil painting styles, cartoons, CGI, or rendered appearances. Do not use smooth fabrics where texture is expected, flat embroidery, or soft/melted beads.</textarea>
             </div>
 
             <!-- POSES SECTION -->
@@ -379,7 +378,9 @@ Retry with strict enforcement:
     <div id="toast-container"></div>
 
     <!-- External JS -->
-    <script src="js/master.js?v=6.0.5"></script>
+    <script>
+        document.write('<script src="js/master.js?v=' + new Date().getTime() + '"><\/script>');
+    </script>
 
     <!-- Service Worker Registration -->
     <script>

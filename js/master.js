@@ -2213,6 +2213,10 @@ function updateAllPrompts() {
       /TASK: "Dress" a real Indian female model in this exact garment\./,
       "TASK: You must STRICTLY ONLY copy the GARMENT. DO NOT copy the person's face, body type, skin tone, jewelry, pose, or background. Completely replace the person with a professional high-end fashion model as specified below, wearing the exact garment."
     );
+    physicsBaseText = physicsBaseText.replace(
+      /RETAIN THE IDENTICAL FACE, SKIN TONE, AND BODY PROPORTIONS\. MUST LOCK THE FIRST SUCCESSFUL GENERATION'S MODEL EVERY TIME\./,
+      "DO NOT RETAIN THE INPUT PERSON'S FACE. YOU MUST GENERATE A COMPLETELY NEW MODEL IDENTITY."
+    );
   }
 
   const finalMaster =
@@ -2255,8 +2259,18 @@ function updateAllPrompts() {
 
   const finalAdditional = `Set the scene in a high-end commercial fashion studio.\nThe background must be a pure flat seamless continuous backdrop (${customBgColor}) with zero cast shadows on the floor.\nPlease use crisp key lighting to create specular glints on the garment embellishments. Incorporate global illumination with subsurface scattering to ensure the fabric and model look highly realistic.\nEnsure the gold zardosi and stones catch the light and sparkle naturally. Prevent any background edge bloom from bleeding into the garment edges.\nCrucially, maintain the exact model identity (face, silhouette, hair) consistently if regenerating. The styling should feature elegant, loose hair and high-fidelity lighting.`;
 
+  let finalNegative = "blurry, pixelated, bad structure, extra limbs, extra fingers, missing limbs, watermarks, text, signatures, low res, plastic look, oil painting, cartoon, CGI, smooth fabrics (unless silk), flat embroidery, soft/melted beads";
+  
+  if (inputSource === "model") {
+    finalNegative += ", original face, likeness of input model, original identity, facial recognition, exact original person";
+  }
+
   document.getElementById("masterPrompt").value = finalMaster;
   document.getElementById("additionalPrompt").value = finalAdditional;
+  const negInput = document.getElementById("negativePrompt");
+  if (negInput) {
+    negInput.value = finalNegative;
+  }
 
   // Build structured JSON in the background for copying
   window.currentJsonState = window.currentJsonState || { poses: {} };

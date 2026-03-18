@@ -1,5 +1,5 @@
-// NanoBanana Pro – Service Worker v1.0
-const CACHE_NAME = 'nanobanana-pro-v1';
+// Buzl's Gemini – Service Worker v6.2.0
+const CACHE_NAME = 'buzls-gemini-v6.2.0';
 
 const PRECACHE_URLS = [
   './',

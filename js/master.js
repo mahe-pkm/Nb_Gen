@@ -86,7 +86,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Chudidhar is accentuated on the weight-bearing side. The folds of the kurta bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Chudidhar is accentuated on the weight-bearing side. The folds of the kurta bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "chudidhar/pose2_v1.png",
         },
         {
@@ -118,7 +118,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the kurta forward; the trailing movement pushes it back.\r\nGARMENT: The kurta creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the kurta forward; the trailing movement pushes it back.\r\nGARMENT: The kurta creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "chudidhar/pose3_v3.png",
         },
       ],
@@ -218,17 +218,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the kurta gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the kurta gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "chudidhar/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the kurta flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the kurta fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the kurta flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the kurta fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "chudidhar/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The kurta is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Chudidhar.\r\nFRAMING: Wide enough to contain the flared hem edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The kurta is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Chudidhar.\r\nFRAMING: Wide enough to contain the flared hem edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "chudidhar/pose8_v3.png",
         },
       ],
@@ -286,7 +286,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Half Saree is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Half Saree is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "half_saree/pose2_v1.png",
         },
         {
@@ -318,7 +318,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "half_saree/pose3_v3.png",
         },
       ],
@@ -418,17 +418,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "half_saree/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "half_saree/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Half Saree.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Half Saree.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "half_saree/pose8_v3.png",
         },
       ],
@@ -486,7 +486,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Lehenga is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Lehenga is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "lehenga/pose2_v1.png",
         },
         {
@@ -518,7 +518,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "lehenga/pose3_v3.png",
         },
       ],
@@ -618,17 +618,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "lehenga/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "lehenga/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Lehenga.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Lehenga.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "lehenga/pose8_v3.png",
         },
       ],
@@ -686,7 +686,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Long Gown is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Long Gown is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "long_gown/pose2_v1.png",
         },
         {
@@ -718,7 +718,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "long_gown/pose3_v3.png",
         },
       ],
@@ -818,17 +818,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "long_gown/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "long_gown/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Long Gown.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Long Gown.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "long_gown/pose8_v3.png",
         },
       ],
@@ -886,7 +886,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Ready to Wear Saree is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Ready to Wear Saree is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "ready_saree/pose2_v1.png",
         },
         {
@@ -918,7 +918,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "ready_saree/pose3_v3.png",
         },
       ],
@@ -1018,17 +1018,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "ready_saree/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "ready_saree/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Ready to Wear Saree.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Ready to Wear Saree.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "ready_saree/pose8_v3.png",
         },
       ],
@@ -1086,7 +1086,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Semi Lehenga is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Semi Lehenga is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "semi_lehenga/pose2_v1.png",
         },
         {
@@ -1118,7 +1118,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "semi_lehenga/pose3_v3.png",
         },
       ],
@@ -1218,17 +1218,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "semi_lehenga/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "semi_lehenga/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Semi Lehenga.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Semi Lehenga.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "semi_lehenga/pose8_v3.png",
         },
       ],
@@ -1286,7 +1286,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Sharara is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Sharara is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "sharara/pose2_v1.png",
         },
         {
@@ -1318,7 +1318,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "sharara/pose3_v3.png",
         },
       ],
@@ -1418,17 +1418,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "sharara/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "sharara/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Sharara.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Sharara.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "sharara/pose8_v3.png",
         },
       ],
@@ -1486,7 +1486,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Tops is accentuated on the weight-bearing side. The folds of the top bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Tops is accentuated on the weight-bearing side. The folds of the top bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "tops/pose2_v1.png",
         },
         {
@@ -1518,7 +1518,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the fabric forward; the trailing movement pushes it back.\r\nGARMENT: The top creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the fabric forward; the trailing movement pushes it back.\r\nGARMENT: The top creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "tops/pose3_v3.png",
         },
       ],
@@ -1618,17 +1618,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the fabric gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the fabric gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "tops/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the top flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the top flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "tops/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The top is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Tops.\r\nFRAMING: Wide enough to contain the flared hem edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The top is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Tops.\r\nFRAMING: Wide enough to contain the flared hem edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "tops/pose8_v3.png",
         },
       ],
@@ -1686,7 +1686,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Two Piece is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Two Piece is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "two_piece/pose2_v1.png",
         },
         {
@@ -1718,7 +1718,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "two_piece/pose3_v3.png",
         },
       ],
@@ -1818,17 +1818,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "two_piece/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "two_piece/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Two Piece.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Two Piece.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "two_piece/pose8_v3.png",
         },
       ],
@@ -1886,7 +1886,7 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Weight Shift",
-          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Anarkali is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, front-facing.\r\nPOSE: Model adopts a "Contrapposto" stance—weight shifted entirely to one mid-section, creating a subtle S-curve in the posture axis. The non-weight-bearing stance is slightly bent at the knee, relaxing the posture. Arms hang loosely at the sides.\r\nGARMENT: The skirt flare of the Anarkali is accentuated on the weight-bearing side. The folds of the skirt bunch slightly on the relaxed side, showing fabric pliability.\r\nFRAMING: Vertical alignment capturing the subtle curve of the silhouette.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "anarkali/pose2_v1.png",
         },
         {
@@ -1918,7 +1918,7 @@ const POSE_LIBRARY = {
         },
         {
           label: "V3: Walking",
-          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Full fashion shot in strict portrait orientation, side profile.\r\nPOSE: Dynamic walking profile. Model is caught mid-step moving across the frame (left to right or vice versa). The leading movement pulls the skirt forward; the trailing movement pushes it back.\r\nGARMENT: The skirt creates a "motion trail" behind the model, flying out slightly due to air resistance. This showcases lightness/heaviness of the material.\r\nFRAMING: Wide enough to capture the trailing hem.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "anarkali/pose3_v3.png",
         },
       ],
@@ -2018,17 +2018,17 @@ const POSE_LIBRARY = {
       variations: [
         {
           label: "V1: Static",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nFRAMING: mid-section down to floor.\r\nPOSE: Neutral standing. posture perfectly straight.\r\nGARMENT: Focus on the "Fall" and "Ghera" (Flare). Shows how the skirt gathers at the bottom. We can see the hemline stitching (pico/facing). Shows how the fabric interacts with gravity when still.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "anarkali/pose8_v1.png",
         },
         {
           label: "V2: Holding Edge",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model extends one stance slightly and uses her hand to hold the edge of the skirt flare, pulling it out wide.\r\nGARMENT: This displays the total width of a single "Kali" (panel) or the full circumference of the hem. It shows the translucency of the skirt fabric when stretched vs when bunched.\r\nShot on 80mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "anarkali/pose8_v2.png",
         },
         {
           label: "V3: Gentle Turn",
-          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Anarkali.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment's length and volume.',
+          text: 'Portrait-orientation mid-to-lower fashion shot.\r\nPOSE: Model performs a "Twirl" or "Spin" — caught in freeze-frame.\r\nGARMENT: The skirt is fully flared out by centrifugal force, forming a circle or semi-circle. This demonstrates the volume and grandiosity of the Anarkali.\r\nFRAMING: Wide enough to contain the flared skirt edges.\r\nShot on 50mm lens.\r\nFRAMING CONSTRAINT: Must leave ample room for ceiling and floor. Ensure full visibility of the garment\'s length and volume.',
           img: "anarkali/pose8_v3.png",
         },
       ],

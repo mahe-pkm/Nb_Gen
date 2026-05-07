@@ -1,5 +1,5 @@
 // NanoBanana Pro – Service Worker v1.0
-const CACHE_NAME = 'nanobanana-pro-v1';
+const CACHE_NAME = 'nanobanana-pro-v2';
 
 const PRECACHE_URLS = [
   './',

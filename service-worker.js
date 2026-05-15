@@ -1,5 +1,5 @@
 // NanoBanana Pro – Service Worker v1.0
-const CACHE_NAME = 'nanobanana-pro-v4';
+const CACHE_NAME = 'nanobanana-pro-v5';
 
 const PRECACHE_URLS = [
   './',
@@ -34,17 +34,15 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch: cache-first, falling back to network
+// Fetch: Network-first, falling back to cache
 self.addEventListener('fetch', event => {
-  // Skip non-GET and cross-origin requests (e.g. Google Fonts CDN)
+  // Skip non-GET and cross-origin requests
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      if (cachedResponse) return cachedResponse;
-
-      return fetch(event.request).then(networkResponse => {
-        // Cache successful same-origin responses for future use
+    fetch(event.request)
+      .then(networkResponse => {
+        // Network was successful. Clone response and update cache
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseClone = networkResponse.clone();
           caches.open(CACHE_NAME).then(cache => {
@@ -52,12 +50,17 @@ self.addEventListener('fetch', event => {
           });
         }
         return networkResponse;
-      }).catch(() => {
-        // Offline fallback: return the cached index page for navigation requests
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
-    })
+      })
+      .catch(() => {
+        // Network failed (offline). Fall back to cache
+        return caches.match(event.request).then(cachedResponse => {
+          if (cachedResponse) return cachedResponse;
+          
+          // If completely offline and file not cached, return index.html for navigation
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+        });
+      })
   );
 });
